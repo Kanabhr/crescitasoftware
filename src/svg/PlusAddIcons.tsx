@@ -1,0 +1,8 @@
+
+export const PlusIcon = () => {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 6H0M6 12L6 0" stroke="currentColor" />
+        </svg>
+    );
+};
