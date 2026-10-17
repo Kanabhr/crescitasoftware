@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { causes_slider_params } from "@/constant/swiper";
 import { Autoplay, FreeMode } from "swiper/modules";
 import { ButtonArrowIcon } from "@/svg/ArrowIcons";
@@ -46,7 +46,7 @@ const CreativeAgencyHero = () => {
                     <div className="row">
                         <div className="col-12">
                             <div className="tp-hero-title-wrap text-center mb-40 tp_fade_anim" data-delay=".4">
-                                <h2 className="tp-hero-title tp-title-middle-animetion tp-ff-sequel-bold-head">Cunnet Agency</h2>
+                                <h2 className="tp-hero-title tp-title-middle-animetion tp-ff-sequel-bold-head">Crescita</h2>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-5">

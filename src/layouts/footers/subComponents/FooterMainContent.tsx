@@ -25,7 +25,7 @@ const FooterMainContent = () => {
                 <div className="col-xxl-4 col-xl-5 offset-xxl-5 offset-xl-3 col-lg-6">
                     <div className="tp-footer-widget ml-40 mb-30 tp_fade_anim" data-delay=".5">
                         <span className="tp-footer-dec text-white">Searching for exceptional talents?</span>
-                        <h4 className="tp-footer-email tp-ff-sequel-roman text-white"><Link href="mailto:cunnet@gmail.com">cunnet@gmail.com</Link></h4>
+                        <h4 className="tp-footer-email tp-ff-sequel-roman text-white"><Link href="mailto:info@crescitasoftware.com">info@crescitasoftware.com</Link></h4>
                     </div>
                 </div>
             </div>

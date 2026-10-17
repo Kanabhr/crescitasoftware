@@ -61,7 +61,7 @@ const ServiceArea = () => {
                 <div className="row align-items-end">
                     <div className="col-xxl-11 col-xl-12">
                         <div className="tp-about-title-wrap mb-30">
-                            <h2 className="tp-section-title reveal-text">At cunnet, we don&apos;t just build website<br />
+                            <h2 className="tp-section-title reveal-text">At Crescita, we don&apos;t just build website<br />
                                 or campaigns we craft purpose-driven
                                 digital journeys.
                             </h2>

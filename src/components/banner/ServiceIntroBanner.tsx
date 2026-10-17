@@ -31,7 +31,7 @@ const ServiceIntroBanner = () => {
                         </div>
                         <div className="col-sm-6">
                             <div className="inner-service-banner-scroll smooth mb-10 text-sm-end">
-                                <span className="tp-ff-sequel-semi-bold text-uppercase">10 years of experience</span>
+                                <span className="tp-ff-sequel-semi-bold text-uppercase">8 years of experience</span>
                             </div>
                         </div>
                     </div>

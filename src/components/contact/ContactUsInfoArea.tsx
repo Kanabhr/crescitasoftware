@@ -3,29 +3,29 @@ import Link from "next/link";
 
 const contactInfo = [
     {
-        title: "San Francisco",
+        title: "Jabalpur",
         image: "/assets/img/contact/contact-us-thumb-1.jpg",
         speed: "1.2",
         offset: false,
     },
     {
-        title: "Germany",
+        title: "Jabalpur (HQ)",
         image: "/assets/img/contact/contact-us-thumb-2.jpg",
         speed: ".9",
         offset: true,
     },
-    {
-        title: "New Zealand",
-        image: "/assets/img/contact/contact-us-thumb-3.jpg",
-        speed: "1.2",
-        offset: false,
-    },
-    {
-        title: "France",
-        image: "/assets/img/contact/contact-us-thumb-4.jpg",
-        speed: ".9",
-        offset: true,
-    },
+    // {
+    //     title: "New Zealand",
+    //     image: "/assets/img/contact/contact-us-thumb-3.jpg",
+    //     speed: "1.2",
+    //     offset: false,
+    // },
+    // {
+    //     title: "France",
+    //     image: "/assets/img/contact/contact-us-thumb-4.jpg",
+    //     speed: ".9",
+    //     offset: true,
+    // },
 ];
 
 const ContactUsInfoArea = () => {

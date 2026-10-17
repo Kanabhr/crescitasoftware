@@ -564,3 +564,74 @@
 .tp-word-span {
     display: inline-block;
 }
+
+/* ==========================================================================
+   SCOPED OVERRIDES: CreativeAgencyFooter — brand blue #0058CC (light page only)
+   --------------------------------------------------------------------------
+   Target:   /creative-agency light theme only.
+
+   html:not(.cunnet-dark) is a subject selector on <html> itself — the only
+   element that receives cunnet-dark (added by src/app/dark/layout.tsx via
+   document.documentElement). This correctly excludes every /dark/* route.
+
+   A. Email link hover
+      .tp-footer-area:not(.tp-section-bg) excludes MotionGraphicFooter
+      (its wrapper carries tp-section-bg).
+      .tp-footer-email:not(.text-white) excludes BrandingStudio, ModernAgency,
+      PersonalPortfolio (all have text-white on their tp-footer-email element).
+      DigitalStudioFooter renders no tp-footer-email at all — irrelevant.
+      Result: matches ONLY CreativeAgencyFooter on the light page.
+
+   B. Quick-links pill hover
+      :not(.mp-footer-style):not(.cs-footer-style) on the wrapper excludes
+      ModernAgency, PersonalPortfolio (mp-footer-style) and BrandingStudio
+      (cs-footer-style). :not(.tp-section-bg) excludes MotionGraphicFooter.
+      .tp-footer-link:not(.ca-footer-link) excludes DigitalStudioFooter
+      (its tp-footer-link element also carries ca-footer-link).
+      Result: matches ONLY CreativeAgencyFooter on the light page.
+
+   No global rules changed. No .tsx files edited. Only this file changed.
+   ========================================================================== */
+
+/* A — email link hover: red (#fa2837 via --tp-theme-primary) -> #0058CC */
+html:not(.cunnet-dark) .tp-footer-area:not(.tp-section-bg) .tp-footer-email:not(.text-white) a:hover {
+    color: #0058CC;
+    text-decoration-color: #0058CC;
+}
+
+/* B — quick-links pill hover: black -> #0058CC */
+html:not(.cunnet-dark) .tp-footer-area:not(.mp-footer-style):not(.cs-footer-style):not(.tp-section-bg) .tp-footer-link:not(.ca-footer-link) .tp-hero-social a:hover {
+    background: #0058CC;
+    border-color: #0058CC;
+    color: var(--tp-common-white);
+}
+
+/* C — email font-size: reduce for longer address (CreativeAgencyFooter light only) */
+html:not(.cunnet-dark) .tp-footer-area:not(.tp-section-bg) .tp-footer-email:not(.text-white) {
+    font-size: 28px;
+}
+@media only screen and (min-width: 1400px) and (max-width: 1599px),
+       only screen and (min-width: 1200px) and (max-width: 1399px),
+       only screen and (min-width: 992px) and (max-width: 1199px),
+       only screen and (min-width: 768px) and (max-width: 991px),
+       only screen and (min-width: 576px) and (max-width: 767px),
+       (max-width: 574.98px) {
+    html:not(.cunnet-dark) .tp-footer-area:not(.tp-section-bg) .tp-footer-email:not(.text-white) {
+        font-size: 22px;
+    }
+}
+@media (hover: hover) {
+    html.cunnet-dark .tp-hero-title.tp-title-middle-animetion *:not(:has(*)) {
+        display: inline-block;
+        cursor: default;
+        background-image: linear-gradient(#3B82F6, #3B82F6);
+        background-repeat: no-repeat;
+        background-position: left bottom;
+        background-size: 0% 0.07em;
+        transition: color 0.35s ease, background-size 0.35s ease;
+    }
+    html.cunnet-dark .tp-hero-title.tp-title-middle-animetion *:not(:has(*)):hover {
+        color: #3B82F6 !important;
+        // background-size: 100% 0.07em;
+    }
+}

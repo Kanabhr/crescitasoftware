@@ -14,7 +14,7 @@ const CreativeAgencyPortfolio = () => {
                     <div className="col-lg-9">
                         <div className="tp-portfolio-title-wrap mb-65">
                             <h2 className="tp-section-title tp-text-perspective text-white">
-                                At Cunnet, we don&apos;t just design websites or launch campaigns we create.
+                                At Crescita, we don&apos;t just design websites or launch campaigns we create.
                                 <span className="tp-about-btn-transform d-inline-block ml-20">
                                     <SmartLink className="tp-btn tp-btn-white-border tp-ff-inter" href="/portfolio">
                                         <span>

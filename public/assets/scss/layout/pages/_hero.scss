@@ -883,3 +883,12 @@
         }
     }
 }
+@media (hover: hover) {
+    html:not(.cunnet-dark) .tp-hero-title.tp-title-middle-animetion *:not(:has(*)) {
+        transition: color 0.35s ease;
+        cursor: default;
+    }
+    html:not(.cunnet-dark) .tp-hero-title.tp-title-middle-animetion *:not(:has(*)):hover {
+        color: #0058CC !important;
+    }
+}

@@ -14,27 +14,27 @@ const ContactUsFormArea = () => {
                                     <Image width={60} height={60} src="/assets/img/contact/author.png" alt="author" />
                                 </div>
                                 <div className="tp-contact-author-content">
-                                    <h6>Kate Johnson</h6>
-                                    <span>Digital Artist</span>
+                                    <h6>Anant Tiwari</h6>
+                                    <span>Founder Sales-Head</span>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="tp-contact-info mb-30">
                                 <div className="mb-20">
-                                    <Link className="tp-contact-tel" href="tel:(510)395-2600">(510) 395-2600</Link>
+                                    <Link className="tp-contact-tel" href="tel:(510)395-2600">(+91) 9203784927</Link>
                                 </div>
                                 <div className="mb-30">
-                                    <Link className="tp-contact-mail" href="mailto:hello@Cunnet.com">Hello@Cunnet.com</Link>
+                                    <Link className="tp-contact-mail" href="mailto:hello@Cunnet.com">info@crescitasoftware.com</Link>
                                 </div>
                                 <div className="tp-contact-address mb-30">
                                     <h4>Address</h4>
-                                    <Link href="https://www.google.com/maps" className="common-underline" target="_blank">4140 Parker Rd. Allentown, New<br /> Mexico 31134</Link>
+                                    <Link href="https://www.google.com/maps" className="common-underline" target="_blank">House no .1803 Rajeev Nagar, Cherital, Jabalpur, Madhya Pradesh<br /> India - 482002</Link>
                                 </div>
-                                <div className="tp-contact-address">
+                                {/* <div className="tp-contact-address">
                                     <h4>Address</h4>
-                                    <Link href="https://www.google.com/maps" className="common-underline" target="_blank">4140 Parker Rd. Allentown, New<br /> Mexico 31134</Link>
-                                </div>
+                                    <Link href="https://www.google.com/maps" className="common-underline" target="_blank">House no .1803 Rajeev Nagar, Cherital, Jabalpur, Madhya Pradesh<br /> India - 482002</Link>
+                                </div> */}
                             </div>
                         </div>
                         <div className="col-lg-6">
