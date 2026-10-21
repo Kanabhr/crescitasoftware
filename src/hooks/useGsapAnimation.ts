@@ -13,7 +13,7 @@ export const titleMiddleAnimetion = () => {
     const title = document.querySelector(".tp-title-middle-animetion");
     if (!title) return;
 
-    const letters = title.textContent.split("");
+    const letters = (title.textContent ?? "").split("");
     title.textContent = "";
     letters.forEach(char => {
       const span = document.createElement("span");
@@ -643,7 +643,7 @@ export const projectTitleAnimation = () => {
   if (!titleElements.length) return;
 
   titleElements.forEach((textEl) => {
-    const text = textEl.textContent.trim();
+  const text = (textEl.textContent ?? "").trim();
     textEl.setAttribute("aria-label", text);
     const html = [...text]
       .map((char, i) => {

@@ -109,3 +109,8 @@
         width: auto;
     }
 }
+// added to fix logo streteching issue
+.tp-footer-area img[src*="logo"] {
+    height: auto;
+    max-width: 100%;
+}

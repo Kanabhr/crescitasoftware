@@ -182,7 +182,7 @@ const ContactMeForm = () => {
             >
                 <span>
                     <span className="text-1">Submit Message</span>
-                    <span className="text-2">Submit Message</span>
+                    {/* <span className="text-2">Submit Message</span> */}
                 </span>
                 <i>
                     <ButtonArrowIcon />

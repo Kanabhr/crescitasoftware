@@ -16,7 +16,7 @@
     "framer-motion": "^12.24.11",
     "gsap": "^3.14.2",
     "hover-effect": "^1.2.1",
-    "next": "16.1.6",
+    "next": "16.2.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.70.0",
@@ -31,7 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.1",
+    "eslint-config-next": "16.2.6",
     "typescript": "^5"
   }
 }
