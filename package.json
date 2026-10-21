@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "clean": "rm -rf node_modules .next yarn.lock package-lock.json",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
