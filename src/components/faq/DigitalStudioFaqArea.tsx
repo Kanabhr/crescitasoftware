@@ -1,11 +1,12 @@
-import { digitalStudioFaq } from "@/data/faq-data";
+import { getDigitalStudioFaq } from "@/lib/faq";
 import SmartLink from "../common/SmartLink";
 import { ArrowIconFour } from "@/svg";
 import Image from "next/image";
 
-const DigitalStudioFaqArea = () => {
+const DigitalStudioFaqArea = async () => {
+    const digitalStudioFaq = await getDigitalStudioFaq();
     return (
-        <div className="ca-faq-area pt-135 pb-145">
+      <div className="ca-faq-area pt-135 pb-145">
             <div className="container">
                 <div className="row">
                     {/* LEFT */}
@@ -96,5 +97,4 @@ const DigitalStudioFaqArea = () => {
         </div>
     );
 };
-
 export default DigitalStudioFaqArea;
