@@ -111,6 +111,7 @@ export interface PricingPlanDT {
     popular?: boolean;
     features: string[];
     buttonBorder: boolean;
+    ctaLink?: string;
 };
 //define interface for checkout Billing Form DT
 export interface BillingFormDataDT {
