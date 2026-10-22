@@ -1,7 +1,7 @@
 import { ArrowIconEleven, ButtonArrowIcon } from "@/svg/ArrowIcons";
 import { careerData } from "@/data/career-data";
 import SmartLink from "../common/SmartLink";
-import { getJobs } from "@/lib/carrer";
+import { getJobs } from "@/lib/careers";
 const CareerOpeningArea = async () => {
     const careerData = await getJobs();
     return (

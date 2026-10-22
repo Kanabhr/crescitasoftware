@@ -1,4 +1,4 @@
-import { getJobById } from "@/lib/carrer";
+import { getJobById } from "@/lib/careers";
 import { IdProps } from "@/types/custom-dt";
 import Link from "next/link";
 import { notFound } from "next/navigation";

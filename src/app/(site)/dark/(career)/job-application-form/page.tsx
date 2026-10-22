@@ -1,18 +1,8 @@
-import JobApplicationTopIntro from "@/components/career/JobApplicationTopIntro";
-import JobApplicationForm from "@/components/form/JobApplicationForm";
-import { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+import { getFirstOpenJobId } from "@/lib/careers";
 
-export const metadata: Metadata = {
-    title: "Job Application Form - Creative Portfolio Agency Nextjs Template",
-};
-
-const page = () => {
-    return (
-        <main>
-            <JobApplicationTopIntro />
-            <JobApplicationForm />
-        </main>
-    );
-};
-
-export default page;
+export default async function JobApplicationIndex() {
+    const id = await getFirstOpenJobId();
+    if (id === null) notFound();
+    redirect(`/job-application-form/${id}`);
+}

@@ -1,6 +1,6 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
-
+import { DEFAULT_FORM_FIELDS } from '../lib/defaultFormFields'
 const revalidateCareerPages = () => {
   for (const path of ['/career', '/dark/career', '/career-details', '/dark/career-details']) {
     revalidatePath(path)
@@ -90,6 +90,69 @@ export const Jobs: CollectionConfig = {
       options: [
         { label: 'Yearly', value: 'yearly' },
         { label: 'Monthly', value: 'monthly' },
+      ],
+    },
+        {
+      name: 'formFields',
+      label: 'Application form fields',
+      type: 'array',
+      defaultValue: DEFAULT_FORM_FIELDS,
+      admin: {
+        description:
+          'The fields applicants fill in for this job. Drag to reorder, add, remove or edit.',
+      },
+      validate: (value: unknown) => {
+        if (!Array.isArray(value)) return true
+        const keys = value.map((row) => (row as { key?: string }).key)
+        return new Set(keys).size === keys.length ? true : 'Each field needs a unique key.'
+      },
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        {
+          name: 'key',
+          type: 'text',
+          required: true,
+          admin: {
+            description:
+              'Short id used to store the answer, for example "portfolio". Letters, numbers and underscores only.',
+          },
+          validate: (value: string | null | undefined) =>
+            /^[a-zA-Z][a-zA-Z0-9_]*$/.test(value ?? '')
+              ? true
+              : 'Use letters, numbers and underscores only, starting with a letter.',
+        },
+        {
+          name: 'type',
+          type: 'select',
+          required: true,
+          defaultValue: 'text',
+          options: [
+            { label: 'Short text', value: 'text' },
+            { label: 'Email', value: 'email' },
+            { label: 'Long text', value: 'textarea' },
+            { label: 'Dropdown', value: 'select' },
+            { label: 'File upload', value: 'file' },
+          ],
+        },
+        {
+          name: 'width',
+          type: 'select',
+          defaultValue: 'full',
+          options: [
+            { label: 'Full width', value: 'full' },
+            { label: 'Half width', value: 'half' },
+          ],
+        },
+        { name: 'required', type: 'checkbox', defaultValue: false },
+        {
+          name: 'options',
+          type: 'array',
+          admin: {
+            description: 'Choices shown in the dropdown.',
+            condition: (_, siblingData) => siblingData?.type === 'select',
+          },
+          fields: [{ name: 'option', type: 'text', required: true }],
+        },
       ],
     },
   ],

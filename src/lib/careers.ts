@@ -1,7 +1,8 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { CareerDT } from '@/types/career-dt'
+import type { ApplicationFieldDT, CareerDT } from '@/types/career-dt'
 import { CalenderIcon, ClockIcon, EditIcon, ExperienceIcon } from '@/svg/BenefitIcons'
+import { DEFAULT_FORM_FIELDS, type FormFieldRow } from './defaultFormFields'
 
 type JobDoc = {
   id: number
@@ -24,6 +25,7 @@ type JobDoc = {
   salaryMax?: number | null
   salaryCurrency?: string | null
   salaryPeriod?: 'yearly' | 'monthly' | null
+  formFields?: FormFieldRow[] | null
 }
 
 const LOCALES: Record<string, string> = { INR: 'en-IN' }
@@ -81,8 +83,7 @@ function toCareer(d: unknown): CareerDT {
       { icon: ClockIcon, label: 'Deadline', value: fmtDate(doc.deadline) },
     ].filter((s) => s.value),
     salary: formatSalary(doc),
-    // Step 2 will change this to /job-application-form/<id>.
-    applyLink: '/job-application-form',
+    applyLink: `/job-application-form/${doc.id}`,
     roles: `${String(n).padStart(2, '0')} Open Role${n === 1 ? '' : 's'}`,
   }
 }
@@ -122,4 +123,42 @@ export async function getFirstOpenJobId(): Promise<number | null> {
     depth: 0,
   })
   return docs[0] ? (docs[0] as unknown as JobDoc).id : null
+}
+
+export interface JobFormDT {
+  id: number
+  title: string
+  jobType: string
+  fields: ApplicationFieldDT[]
+}
+
+export async function getJobForm(id?: number | string): Promise<JobFormDT | null> {
+  const numericId = Number(id)
+  if (!Number.isInteger(numericId)) return null
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'jobs',
+    where: { and: [{ id: { equals: numericId } }, { status: { equals: 'open' } }] },
+    limit: 1,
+    depth: 0,
+  })
+  const doc = docs[0] as unknown as JobDoc | undefined
+  if (!doc) return null
+
+  // A job with no fields saved yet gets the default form.
+  const rows = doc.formFields && doc.formFields.length > 0 ? doc.formFields : DEFAULT_FORM_FIELDS
+
+  return {
+    id: doc.id,
+    title: doc.title,
+    jobType: doc.jobType,
+    fields: rows.map((f) => ({
+      key: f.key,
+      label: f.label,
+      type: f.type,
+      required: Boolean(f.required),
+      width: f.width === 'half' ? 'half' : 'full',
+      options: (f.options ?? []).map((o) => o.option),
+    })),
+  }
 }
