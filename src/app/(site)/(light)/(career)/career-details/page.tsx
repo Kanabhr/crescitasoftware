@@ -1,18 +1,8 @@
-import CareerBannerArea from "@/components/banner/CareerBannerArea";
-import CareerDetailsArea from "@/components/career/CareerDetailsArea";
-import { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+import { getFirstOpenJobId } from "@/lib/carrer";
 
-export const metadata: Metadata = {
-    title: "Career Details - Creative Portfolio Agency Nextjs Template",
-};
-
-const page = () => {
-    return (
-        <main>
-            <CareerBannerArea />
-            <CareerDetailsArea id={1} />
-        </main>
-    );
-};
-
-export default page;
+export default async function CareerDetailsIndex() {
+    const id = await getFirstOpenJobId();
+    if (id === null) notFound();
+    redirect(`/career-details/${id}`);
+}
