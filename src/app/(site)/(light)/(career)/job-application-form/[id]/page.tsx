@@ -12,7 +12,7 @@ export default async function JobApplicationPage(props: PageParamsProps) {
     return (
         <main>
             <JobApplicationTopIntro subtitle={job.jobType} title={job.title} />
-            <JobApplicationForm fields={job.fields} />
+         <JobApplicationForm jobId={job.id} fields={job.fields} />
         </main>
     );
 }

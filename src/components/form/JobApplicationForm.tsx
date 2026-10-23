@@ -4,30 +4,79 @@ import { useForm, type FieldValues, type RegisterOptions } from "react-hook-form
 import { ButtonArrowIcon } from "@/svg";
 import { toast } from "react-toastify";
 import type { ApplicationFieldDT } from "@/types/career-dt";
+import { ALLOWED_EXTENSIONS, MAX_FILE_BYTES } from "@/lib/applicationRules";
 
 interface Props {
+    jobId: number;
     fields: ApplicationFieldDT[];
 }
 
-const rulesFor = (f: ApplicationFieldDT): RegisterOptions<FieldValues, string> => ({
-    required: f.required ? `${f.label} is required` : false,
-    ...(f.type === "email"
-        ? { pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" } }
-        : {}),
-});
+const ACCEPT = ALLOWED_EXTENSIONS.map((e) => `.${e}`).join(",");
 
-const JobApplicationForm = ({ fields }: Props) => {
+const rulesFor = (f: ApplicationFieldDT): RegisterOptions<FieldValues, string> => {
+    if (f.type === "file") {
+        return {
+            required: f.required ? `${f.label} is required` : false,
+            validate: (files: FileList | undefined) => {
+                const file = files?.[0];
+                if (!file) return true;
+                const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+                if (!ALLOWED_EXTENSIONS.includes(ext)) return "Upload a PDF or DOCX file.";
+                if (file.size > MAX_FILE_BYTES) return "File must be 5 MB or smaller.";
+                return true;
+            },
+        };
+    }
+    return {
+        required: f.required ? `${f.label} is required` : false,
+        ...(f.type === "email"
+            ? { pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" } }
+            : {}),
+    };
+};
+
+const JobApplicationForm = ({ jobId, fields }: Props) => {
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        setError,
+        formState: { errors, isSubmitting },
     } = useForm<FieldValues>();
 
-    // Step 3 will send the answers and the file to the server.
-    const onSubmit = () => {
-        toast.success("Application submitted successfully!");
-        reset();
+    const onSubmit = async (values: FieldValues) => {
+        const body = new FormData();
+        body.append("jobId", String(jobId));
+        body.append("website", String(values.website ?? "")); // honeypot
+        for (const f of fields) {
+            if (f.type === "file") {
+                const file = (values[f.key] as FileList | undefined)?.[0];
+                if (file) body.append(f.key, file);
+            } else {
+                body.append(f.key, String(values[f.key] ?? ""));
+            }
+        }
+
+        try {
+            const res = await fetch("/api/job-applications", { method: "POST", body });
+            const data: { error?: string; fieldErrors?: Record<string, string> } = await res
+                .json()
+                .catch(() => ({}));
+
+            if (res.ok) {
+                toast.success("Application submitted successfully!");
+                reset();
+                return;
+            }
+            if (data.fieldErrors) {
+                for (const [key, message] of Object.entries(data.fieldErrors)) {
+                    setError(key, { type: "server", message });
+                }
+            }
+            toast.error(data.error ?? "Something went wrong. Please try again.");
+        } catch {
+            toast.error("Network error. Please check your connection and try again.");
+        }
     };
 
     const labelOf = (f: ApplicationFieldDT) => `${f.label}${f.required ? "*" : ""}`;
@@ -43,6 +92,15 @@ const JobApplicationForm = ({ fields }: Props) => {
                     <div className="col-lg-10">
                         <div className="tp-contact-form-wrap tp-application-form-wrap">
                             <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+                                {/* Honeypot: hidden from people, bots fill it */}
+                                <div
+                                    aria-hidden="true"
+                                    style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
+                                >
+                                    <label>Website</label>
+                                    <input type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+                                </div>
+
                                 <div className="row">
                                     {regularFields.map((f) => (
                                         <div
@@ -74,14 +132,18 @@ const JobApplicationForm = ({ fields }: Props) => {
                                         </div>
                                     ))}
 
-                                    {/* Uploads + Submit */}
+                                    {/* Upload + Submit */}
                                     <div className="col-lg-12">
                                         <div className="tp-application-form-btn d-flex justify-content-between">
                                             <div>
                                                 {fileFields.map((f) => (
                                                     <div key={f.key} className="tp-application-upload mb-15">
                                                         <span>{labelOf(f)}</span>
-                                                        <input type="file" {...register(f.key, rulesFor(f))} />
+                                                        <input
+                                                            type="file"
+                                                            accept={ACCEPT}
+                                                            {...register(f.key, rulesFor(f))}
+                                                        />
                                                         {errorOf(f.key) && (
                                                             <p className="form-error">{errorOf(f.key)}</p>
                                                         )}
@@ -90,7 +152,7 @@ const JobApplicationForm = ({ fields }: Props) => {
                                             </div>
 
                                             <div className="tp-application-btn mb-15 mt-10">
-                                                <button className="tp-btn" type="submit">
+                                                <button className="tp-btn" type="submit" disabled={isSubmitting}>
                                                     <span>
                                                         <span className="text-1">Submit Now</span>
                                                         <span className="text-2">Submit Now</span>

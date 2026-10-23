@@ -101,10 +101,18 @@ export const Jobs: CollectionConfig = {
         description:
           'The fields applicants fill in for this job. Drag to reorder, add, remove or edit.',
       },
-      validate: (value: unknown) => {
+          validate: (value: unknown) => {
         if (!Array.isArray(value)) return true
-        const keys = value.map((row) => (row as { key?: string }).key)
-        return new Set(keys).size === keys.length ? true : 'Each field needs a unique key.'
+        const rows = value as { key?: string; type?: string }[]
+        const keys = rows.map((r) => r.key)
+        if (new Set(keys).size !== keys.length) return 'Each field needs a unique key.'
+        if (keys.some((k) => k === 'website' || k === 'jobId')) {
+          return '"website" and "jobId" are reserved keys. Pick another.'
+        }
+        if (rows.filter((r) => r.type === 'file').length > 1) {
+          return 'Only one file upload field is supported per job.'
+        }
+        return true
       },
       fields: [
         { name: 'label', type: 'text', required: true },
