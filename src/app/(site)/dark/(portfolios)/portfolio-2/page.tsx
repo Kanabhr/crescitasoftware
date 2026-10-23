@@ -1,15 +1,19 @@
 import PortfolioTwoBreadcrumb from "@/components/breadcrumb/PortfolioTwoBreadcrumb";
 import PortfolioTwoArea from "@/components/portfolio/PortfolioTwoArea";
 import FaqArea from "@/components/faq/FaqArea";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Portfolio 2 - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/portfolio-2");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/portfolio-2" />
             <PortfolioTwoBreadcrumb />
             <PortfolioTwoArea />
             <FaqArea />

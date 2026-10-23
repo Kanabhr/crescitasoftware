@@ -1,13 +1,17 @@
 import PortfolioRevealingSlider from "@/components/portfolio/PortfolioRevealingSlider";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Portfolio Revealing Slider - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/portfolio-revealing-slider");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/portfolio-revealing-slider" />
             <PortfolioRevealingSlider />
         </main>
     );

@@ -4,16 +4,20 @@ import BrandingStudioBrand from "@/components/brand/BrandingStudioBrand";
 import BradingStuidioAward from "@/components/award/BradingStuidioAward";
 import BrandingStudioHero from "@/components/hero/BrandingStudioHero";
 import BrandingStudioBlog from "@/components/blog/BrandingStudioBlog";
-import { Metadata } from "next";
-import PageBanner from "@/components/banner/PageBanner";
 
-export const metadata: Metadata = {
-    title: "Branding Studio - Creative Portfolio Agency Nextjs Template",
-};
+import PageBanner from "@/components/banner/PageBanner";
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/branding-studio");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/branding-studio" />
             <BrandingStudioHero />
             <BrandingStudioAbout />
             <BrandingStudioBrand />

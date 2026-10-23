@@ -6,14 +6,18 @@ import AboutMeBanner from "@/components/banner/AboutMeBanner";
 import AboutMeSlider from "@/components/about/AboutMeSlider";
 import AboutMeArea from "@/components/about/AboutMeArea";
 import AboutMeBlog from "@/components/blog/AboutMeBlog";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "About Me - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/about-me");
+}
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/about-me" />
             <AboutMeArea />
             <AboutMeSlider />
             <AboutMeResume />

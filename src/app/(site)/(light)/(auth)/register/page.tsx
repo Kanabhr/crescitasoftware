@@ -1,13 +1,17 @@
 import RegisterForm from "@/components/form/RegisterForm";
-import { Metadata } from "next";
-import Link from "next/link";
 
-export const metadata: Metadata = {
-    title: "Register - Creative Portfolio Agency Nextjs Template",
-};
+import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/register");
+}
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/register" />
             <div className="tp-login-area pre-header pt-200 pb-140 p-relative z-index-1 fix">
                 <div className="container">
                     <div className="row justify-content-center">

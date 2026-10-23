@@ -4,15 +4,19 @@ import PersonalPortfolioArea from "@/components/portfolio/PersonalPortfolioArea"
 import PersonalPortfolioAbout from "@/components/about/PersonalPortfolioAbout";
 import PersonalPortfolioHero from "@/components/hero/PersonalPortfolioHero";
 import PersonalPortfolioTeam from "@/components/team/PersonalPortfolioTeam";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Personal Portfolio - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/personal-portfolio");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/personal-portfolio" />
             <PersonalPortfolioHero />
             <PersonalPortfolioAbout />
             <PersonalPortfolioArea />

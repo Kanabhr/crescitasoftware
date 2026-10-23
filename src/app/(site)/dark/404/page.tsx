@@ -1,14 +1,18 @@
-import { Metadata } from "next";
+
 import Image from "next/image";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
-export const metadata: Metadata = {
-    title: "404 Page - Digital Agency & Creative Portfolio",
-};
+
+export async function generateMetadata() {
+    return buildMetadata("/404");
+}
 
 const page = () => {
     return (
         <div className="tp-error-area pt-190 pb-120">
+<BreadcrumbJsonLd path="/404" />
             <div className="container">
                 <div className="row">
                     <div className="col-xl-12">

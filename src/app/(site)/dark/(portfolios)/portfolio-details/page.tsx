@@ -4,17 +4,21 @@ import PortfolioDetailsIntro from "@/components/portfolio/PortfolioDetailsIntro"
 import PortfolioDetailsStep from "@/components/process/PortfolioDetailsProcess";
 import PortfolioDetailsThumb from "@/components/gallery/PortfolioDetailsThumb";
 import portfolioData from "@/data/portfolio-data";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Portfolio Details - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/portfolio-details");
+}
 
 const page = () => {
     const portfolioItems = portfolioData.slice(43, 45);
 
     return (
         <main>
+<BreadcrumbJsonLd path="/portfolio-details" />
             <PortfolioDetailsIntro />
             <PortfolioDetailsOverviewTwo />
             <PortfolioDetailsThumb />
