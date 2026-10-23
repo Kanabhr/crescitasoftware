@@ -14,6 +14,14 @@ type JobRecord = {
   seo?: { noIndex?: boolean | null; canonicalUrl?: string | null } | null
 }
 
+function canonicalUrlOrPath(canonicalUrl: string | null | undefined, path: string) {
+  try {
+    return canonicalUrl ? absoluteSiteUrl(canonicalUrl) : absoluteSiteUrl(path)
+  } catch {
+    return absoluteSiteUrl(path)
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayload({ config })
   const [seoRecords, jobs] = await Promise.all([
@@ -31,14 +39,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = STATIC_SEO_ROUTES.flatMap(({ path }) => {
     const seo = seoByPath.get(path)
     if (path === '/404' || seo?.noIndex) return []
-    return [{ url: seo?.canonicalUrl ? absoluteSiteUrl(seo.canonicalUrl) : absoluteSiteUrl(path) }]
+    return [{ url: canonicalUrlOrPath(seo?.canonicalUrl, path) }]
   })
   const jobPages: MetadataRoute.Sitemap = (jobs.docs as unknown as JobRecord[])
     .filter((job) => !job.seo?.noIndex)
     .map((job) => ({
-      url: job.seo?.canonicalUrl
-        ? absoluteSiteUrl(job.seo.canonicalUrl)
-        : absoluteSiteUrl(`/career-details/${job.id}`),
+      url: canonicalUrlOrPath(job.seo?.canonicalUrl, `/career-details/${job.id}`),
     }))
 
   return [...pages, ...jobPages]

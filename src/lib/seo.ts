@@ -5,7 +5,6 @@ import { STATIC_SEO_ROUTES } from './seoRoutes'
 import { getSiteUrl } from './structuredData'
 
 const ROOT_TITLE = 'Cunnet - Creative Portfolio Agency Nextjs Template'
-const ROOT_DESCRIPTION = 'A modern creative portfolio and agency Next.js template.'
 
 export type SeoFieldsData = {
   metaTitle?: string | null
@@ -53,11 +52,16 @@ export async function buildMetadata(
   const pageSeo = options.lookupPageSeo === false ? null : await getPageSeo(path)
   const seo = options.seo ?? pageSeo?.seo
   const title = seo?.metaTitle || options.fallbackTitle || route?.title || ROOT_TITLE
-  const description = seo?.metaDescription || options.fallbackDescription || ROOT_DESCRIPTION
+  const description = seo?.metaDescription || options.fallbackDescription
   const siteUrl = getSiteUrl()
-  const canonical = seo?.canonicalUrl
-    ? new URL(seo.canonicalUrl, siteUrl)
-    : new URL(canonicalPath, siteUrl)
+  let canonical: URL
+  try {
+    canonical = seo?.canonicalUrl
+      ? new URL(seo.canonicalUrl, siteUrl)
+      : new URL(canonicalPath, siteUrl)
+  } catch {
+    canonical = new URL(canonicalPath, siteUrl)
+  }
   const image =
     seo?.shareImage && typeof seo.shareImage === 'object' && seo.shareImage.url
       ? [{ url: new URL(seo.shareImage.url, siteUrl), alt: seo.shareImage.alt || title }]
@@ -66,11 +70,11 @@ export async function buildMetadata(
   return {
     metadataBase: siteUrl,
     title,
-    description,
+    ...(description ? { description } : {}),
     alternates: { canonical },
     openGraph: {
       title,
-      description,
+      ...(description ? { description } : {}),
       url: canonical,
       type: 'website',
       ...(image ? { images: image } : {}),

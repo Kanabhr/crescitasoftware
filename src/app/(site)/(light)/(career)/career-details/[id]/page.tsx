@@ -13,6 +13,12 @@ export async function generateMetadata(props: PageParamsProps) {
     return buildMetadata(`/career-details/${id}`, {
         seo: job?.seo,
         lookupPageSeo: false,
+        ...(job
+            ? {
+                fallbackTitle: `${job.title} - Careers`,
+                fallbackDescription: job.summary,
+            }
+            : {}),
     });
 }
 
