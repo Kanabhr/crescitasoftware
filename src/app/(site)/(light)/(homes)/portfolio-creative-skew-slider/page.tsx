@@ -1,13 +1,17 @@
 import PortfolioCreativeSkewSlider from "@/components/portfolio/PortfolioCreativeSkewSlider";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Portfolio Creative Skew Slider - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/portfolio-creative-skew-slider");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/portfolio-creative-skew-slider" />
             <PortfolioCreativeSkewSlider />
         </main>
     );

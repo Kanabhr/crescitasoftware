@@ -1,13 +1,17 @@
 import LoginForm from "@/components/form/LoginForm";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Login - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/login");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/login" />
             <div className="tp-login-area pre-header pt-200 pb-140 p-relative z-index-1 fix">
                 <div className="container container-1230 containers">
                     <div className="row justify-content-center">

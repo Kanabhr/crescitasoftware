@@ -5,15 +5,19 @@ import DigitalStudioFaqArea from "@/components/faq/DigitalStudioFaqArea";
 import DigitalStudioAbout from "@/components/about/DigitalStudioAbout";
 import DigitalStudioBrand from "@/components/brand/DigitalStudioBrand";
 import DigitalStudioHero from "@/components/hero/DigitalStudioHero";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Digital Studio - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/digital-studio");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/digital-studio" />
             <DigitalStudioHero />
             <DigitalStudioAbout />
             <DigitalStudioBrand />

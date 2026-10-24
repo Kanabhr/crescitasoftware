@@ -1,14 +1,18 @@
 import CartAreaMain from "@/components/shop/CartAreaMain";
 import ShopTopArea from "@/components/shop/ShopTopArea";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Cart - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/cart");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/cart" />
             <ShopTopArea category2="Shopping Cart" title="Shopping Cart" />
             <CartAreaMain/>
         </main>

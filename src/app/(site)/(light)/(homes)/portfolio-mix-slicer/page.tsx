@@ -1,13 +1,17 @@
 import PortfolioMixSlider from "@/components/portfolio/PortfolioMixSlicer";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Portfolio Mix Slicer - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/portfolio-mix-slicer");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/portfolio-mix-slicer" />
             <PortfolioMixSlider/>
        </main>
     );

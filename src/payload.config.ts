@@ -14,6 +14,7 @@ import { Authors } from './collections/Authors'
 import { Categories } from './collections/Categories'
 import { Posts } from './collections/Posts'
 import { Comments } from './collections/Comments'
+import { PageSeo } from './collections/PageSeo'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, FaqItems, Plans, Jobs, Applications, Authors, Categories, Posts, Comments],
+  collections: [Users, Media, FaqItems, Plans, Jobs, Applications, Authors, Categories, Posts, Comments, PageSeo],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

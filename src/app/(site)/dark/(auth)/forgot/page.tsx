@@ -1,13 +1,17 @@
 import ForgotPassForm from "@/components/form/ForgotPassForm";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Forgot - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/forgot");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/forgot" />
             <div className="tp-login-area pt-200 pb-140 pre-header p-relative z-index-1 fix">
                 <div className="container containers">
                     <div className="row justify-content-center">

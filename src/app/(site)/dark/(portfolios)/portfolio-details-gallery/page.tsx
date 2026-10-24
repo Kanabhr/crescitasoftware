@@ -4,15 +4,19 @@ import PortfolioGalleryDetailsThumb from "@/components/gallery/PortfolioGalleryD
 import PortfolioGalleryThumbSlider from "@/components/gallery/PortdfolioGalleryThumbSlider";
 import PortfolioDetailsOverview from "@/components/overview/PortfolioDetailsOverview";
 import PortfolioDetailsStep from "@/components/process/PortfolioDetailsProcess";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Portfolio Details Gallery - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/portfolio-details-gallery");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/portfolio-details-gallery" />
             <PortfolioGalleryDetailsIntro />
             <PortfolioGalleryDetailsBanner />
             <PortfolioDetailsOverview />

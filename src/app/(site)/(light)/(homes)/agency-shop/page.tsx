@@ -7,15 +7,19 @@ import ShopInstagram from "@/components/product/ShopInstagram";
 import ShopPayment from "@/components/product/ShopPayment";
 import ShopService from "@/components/service/ShopService";
 import ShopHero from "@/components/hero/ShopHero";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Agency Shop - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/agency-shop");
+}
 
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/agency-shop" />
             <ShopHero />
             <ShopService />
             <ShopAgencyProduct />

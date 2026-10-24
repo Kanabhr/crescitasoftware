@@ -3,14 +3,18 @@ import ContactUsInfoArea from "@/components/contact/ContactUsInfoArea";
 import ContactUsTopIntro from "@/components/contact/ContactUsTopIntro";
 import ContactInnerMap from "@/components/contact/ContactInnerMap";
 import ContactUsAbout from "@/components/about/ContactUsAbout";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Contact Us - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/contact-us");
+}
 const page = () => {
     return (
         <main>
+<BreadcrumbJsonLd path="/contact-us" />
             <ContactUsTopIntro />
             <ContactInnerMap />
             <ContactUsFormArea />

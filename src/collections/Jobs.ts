@@ -1,12 +1,14 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { DEFAULT_FORM_FIELDS } from '../lib/defaultFormFields'
+import { seoFields } from '../lib/seoFields'
 const revalidateCareerPages = () => {
   for (const path of ['/career', '/dark/career', '/career-details', '/dark/career-details']) {
     revalidatePath(path)
   }
   revalidatePath('/career-details/[id]', 'page')
   revalidatePath('/dark/career-details/[id]', 'page')
+  revalidatePath('/sitemap.xml')
 }
 
 const textList = (name: string, label: string) => ({
@@ -163,5 +165,6 @@ export const Jobs: CollectionConfig = {
         },
       ],
     },
+    seoFields,
   ],
 }

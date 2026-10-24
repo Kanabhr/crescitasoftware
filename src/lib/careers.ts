@@ -25,8 +25,31 @@ type JobDoc = {
   salaryMax?: number | null
   salaryCurrency?: string | null
   salaryPeriod?: 'yearly' | 'monthly' | null
+  seo?: {
+    metaTitle?: string | null
+    metaDescription?: string | null
+    shareImage?: { url?: string | null; alt?: string | null } | number | null
+    canonicalUrl?: string | null
+    noIndex?: boolean | null
+  } | null
   formFields?: FormFieldRow[] | null
 }
+
+export type JobPostingDoc = Pick<
+  JobDoc,
+  | 'id'
+  | 'title'
+  | 'summary'
+  | 'postedDate'
+  | 'deadline'
+  | 'jobType'
+  | 'location'
+  | 'salaryMin'
+  | 'salaryMax'
+  | 'salaryCurrency'
+  | 'salaryPeriod'
+  | 'seo'
+>
 
 const LOCALES: Record<string, string> = { INR: 'en-IN' }
 
@@ -111,6 +134,19 @@ export async function getJobById(id?: number | string): Promise<CareerDT | null>
     depth: 0,
   })
   return docs[0] ? toCareer(docs[0]) : null
+}
+
+export async function getJobPostingById(id?: number | string): Promise<JobPostingDoc | null> {
+  const numericId = Number(id)
+  if (!Number.isInteger(numericId)) return null
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'jobs',
+    where: { and: [{ id: { equals: numericId } }, { status: { equals: 'open' } }] },
+    limit: 1,
+    depth: 1,
+  })
+  return docs[0] ? (docs[0] as unknown as JobPostingDoc) : null
 }
 
 export async function getFirstOpenJobId(): Promise<number | null> {

@@ -2,15 +2,20 @@ import CreativeAgencyPortfolio from "@/components/portfolio/CreativeAgencyPortfo
 import CreativeAgencyService from "@/components/service/CreativeAgencyService";
 import CreativeAgencyAbout from "@/components/about/CreativeAgencyAbout";
 import CreativeAgencyHero from "@/components/hero/CreativeAgencyHero";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-    title: "Creative Agency - Creative Portfolio Agency Nextjs Template",
-};
+import { buildMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd, OrganizationAndWebsiteJsonLd } from "@/components/seo/JsonLd";
+
+
+export async function generateMetadata() {
+    return buildMetadata("/creative-agency");
+}
 
 const page = () => {
     return (
         <main>
+<OrganizationAndWebsiteJsonLd />
+<BreadcrumbJsonLd path="/creative-agency" />
             <CreativeAgencyHero />
             <CreativeAgencyAbout />
             <CreativeAgencyService />
