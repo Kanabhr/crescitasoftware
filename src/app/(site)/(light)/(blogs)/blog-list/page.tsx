@@ -4,9 +4,12 @@ import BlogListPrimary from "@/components/blog/BlogListPrimary";
 import PageBanner from "@/components/banner/PageBanner";
 import { Metadata } from "next";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
     title: "Blog List - Creative Portfolio Agency Nextjs Template",
 };
+
 const page = () => {
     return (
         <main>

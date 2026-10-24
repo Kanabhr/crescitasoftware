@@ -1,6 +1,6 @@
 import BlogSecondarySingleCard from "./subComponents/BlogSecondarySingleCard";
 import BlogPagination from "./subComponents/BlogPagination";
-import { blogData } from "@/data/blog-data";
+import { getBlogPosts } from "@/lib/blog";
 import BlogSidebar from "./BlogSidebar";
 import Link from "next/link";
 
@@ -16,9 +16,9 @@ const blogTags = [
     "3d modeling",
 ];
 
-const BlogStandardGridArea = () => {
-    //display blog items
-    const displayBlogData = blogData.slice(28, 36);
+const BlogStandardGridArea = async () => {
+    // Newest 8 posts (matches the original 8-card grid layout)
+    const displayBlogData = await getBlogPosts(8);
 
     return (
         <div className="tp-blog-masonary-area tp-animate-tab pb-160">

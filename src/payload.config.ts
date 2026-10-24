@@ -10,6 +10,10 @@ import { Media } from './collections/Media'
 import { Plans } from './collections/Plans'
 import { Jobs } from './collections/Jobs'
 import { Applications } from './collections/Applications'
+import { Authors } from './collections/Authors'
+import { Categories } from './collections/Categories'
+import { Posts } from './collections/Posts'
+import { Comments } from './collections/Comments'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -20,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, FaqItems, Plans, Jobs, Applications],
+  collections: [Users, Media, FaqItems, Plans, Jobs, Applications, Authors, Categories, Posts, Comments],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
