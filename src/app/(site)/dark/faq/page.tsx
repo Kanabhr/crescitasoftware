@@ -6,26 +6,25 @@ import JsonLd, { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { getGeneralFaq } from "@/lib/faq";
 import { buildFaqPageData } from "@/lib/structuredData";
 
-
 export async function generateMetadata() {
-    return buildMetadata("/faq");
+  const m = await buildMetadata("/faq");
+  return m;
 }
-
 const page = async () => {
-    const faqItems = await getGeneralFaq();
-    const structuredFaq = faqItems.map((item) => ({
-        question: item.title ?? item.question ?? "",
-        answer: item.content ?? item.answer ?? "",
-    }));
+  const faqItems = await getGeneralFaq();
+  const structuredFaq = faqItems.map((item) => ({
+    question: item.title ?? item.question ?? "",
+    answer: item.content ?? item.answer ?? "",
+  }));
 
-    return (
-        <main>
-<JsonLd data={buildFaqPageData(structuredFaq)} />
-<BreadcrumbJsonLd path="/faq" />
-            <FaqBreadcrumb />
-            <FaqArea />
-        </main>
-    );
+  return (
+    <main>
+      <JsonLd data={buildFaqPageData(structuredFaq)} />
+      <BreadcrumbJsonLd path="/faq" />
+      <FaqBreadcrumb />
+      <FaqArea />
+    </main>
+  );
 };
 
 export default page;

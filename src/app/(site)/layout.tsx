@@ -9,7 +9,7 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
-  preload: false
+  preload: false,
 });
 
 // Jost font
@@ -17,19 +17,16 @@ const jost = Jost({
   subsets: ["latin"],
   variable: "--font-jost",
   display: "swap",
-  preload: false
+  preload: false,
 });
-
 export const metadata: Metadata = {
-  title: "Cunnet - Creative Portfolio Agency Nextjs Template",
-  description: "A modern creative portfolio and agency Next.js template.",
+  title: {
+    default: "Crescita",
+    template: "%s | Crescita",
+  },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${jost.variable}`}>
