@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { STATIC_SEO_ROUTES } from '@/lib/seoRoutes'
 import { absoluteSiteUrl } from '@/lib/structuredData'
+import { publishedFilter } from '@/lib/blog'
 
 type SeoRecord = {
   path: string
@@ -12,6 +13,11 @@ type SeoRecord = {
 type JobRecord = {
   id: number
   seo?: { noIndex?: boolean | null; canonicalUrl?: string | null } | null
+}
+
+type PostRecord = {
+  id: number
+  seo?: { noIndex?: boolean | null } | null
 }
 
 function canonicalUrlOrPath(canonicalUrl: string | null | undefined, path: string) {
@@ -24,11 +30,17 @@ function canonicalUrlOrPath(canonicalUrl: string | null | undefined, path: strin
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayload({ config })
-  const [seoRecords, jobs] = await Promise.all([
+  const [seoRecords, jobs, posts] = await Promise.all([
     payload.find({ collection: 'page-seo', pagination: false, depth: 0 }),
     payload.find({
       collection: 'jobs',
       where: { status: { equals: 'open' } },
+      pagination: false,
+      depth: 0,
+    }),
+    payload.find({
+      collection: 'posts',
+      where: publishedFilter(),
       pagination: false,
       depth: 0,
     }),
@@ -46,6 +58,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .map((job) => ({
       url: canonicalUrlOrPath(job.seo?.canonicalUrl, `/career-details/${job.id}`),
     }))
+  const postPages: MetadataRoute.Sitemap = (posts.docs as unknown as PostRecord[])
+    .filter((post) => !post.seo?.noIndex)
+    .map((post) => ({ url: absoluteSiteUrl(`/blog-details/${post.id}`) }))
 
-  return [...pages, ...jobPages]
+  return [...pages, ...jobPages, ...postPages]
 }

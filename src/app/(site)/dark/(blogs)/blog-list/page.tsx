@@ -2,17 +2,19 @@ import BlogBreadcrumb from "@/components/breadcrumb/BlogBreadcrumb";
 import BlogListSecondary from "@/components/blog/BlogListSecondary";
 import BlogListPrimary from "@/components/blog/BlogListPrimary";
 import PageBanner from "@/components/banner/PageBanner";
-import { Metadata } from "next";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-    title: "Blog List - Creative Portfolio Agency Nextjs Template",
-};
+export async function generateMetadata() {
+    return buildMetadata("/blog-list");
+}
 
 const page = () => {
     return (
         <main>
+            <BreadcrumbJsonLd path="/blog-list" />
             <BlogBreadcrumb />
             <PageBanner src="/assets/img/banner/thumb-7.jpg" />
             <BlogListPrimary />

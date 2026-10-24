@@ -1,13 +1,14 @@
 import BlogSingleCard from "@/components/blog/subComponents/BlogSingleCard";
 import BlogTopIntro from "@/components/blog/BlogTopIntro";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { getBlogPosts } from "@/lib/blog";
-import { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-    title: "Blog - Creative Portfolio Agency Nextjs Template",
-};
+export async function generateMetadata() {
+    return buildMetadata("/blog");
+}
 
 const page = async () => {
     // Newest 12 posts (matches the original 12-card layout)
@@ -15,6 +16,7 @@ const page = async () => {
 
     return (
         <main>
+            <BreadcrumbJsonLd path="/blog" />
             {/* blog top intro */}
             <BlogTopIntro />
 

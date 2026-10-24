@@ -16,6 +16,7 @@ const revalidateBlogPages = () => {
   for (const path of BLOG_PATHS) revalidatePath(path)
   revalidatePath('/blog-details/[id]', 'page')
   revalidatePath('/dark/blog-details/[id]', 'page')
+  revalidatePath('/sitemap.xml')
 }
 
 export const Posts: CollectionConfig = {

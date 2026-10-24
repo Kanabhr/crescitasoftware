@@ -1,16 +1,18 @@
 import BlogStandardGridArea from "@/components/blog/BlogStandardGridArea";
 import BlogStandardTopIntro from "@/components/blog/subComponents/BlogStandardTopIntro";
-import { Metadata } from "next";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-    title: "Blog Grid With Sidebar - Creative Portfolio Agency Nextjs Template",
-};
+export async function generateMetadata() {
+    return buildMetadata("/blog-grid-with-sidebar");
+}
 
 const page = () => {
     return (
         <main>
+            <BreadcrumbJsonLd path="/blog-grid-with-sidebar" />
             <BlogStandardTopIntro title="The Core Insight" />
             <BlogStandardGridArea />
         </main>

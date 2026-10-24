@@ -1,16 +1,18 @@
 import BlogStandardTopIntro from "@/components/blog/subComponents/BlogStandardTopIntro";
 import BlogStandardArea from "@/components/blog/BlogStandardArea";
-import { Metadata } from "next";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-    title: "Blog Standard - Creative Portfolio Agency Nextjs Template",
-};
+export async function generateMetadata() {
+    return buildMetadata("/blog-standard");
+}
 
 const page = () => {
     return (
         <main>
+            <BreadcrumbJsonLd path="/blog-standard" />
             <BlogStandardTopIntro title="Core Insight" />
             <BlogStandardArea />
         </main>

@@ -1,3 +1,5 @@
+import type { BlogPostDt } from '@/types/custom-dt'
+
 const siteName = 'Cunnet'
 const defaultSiteUrl = 'http://localhost:3000'
 
@@ -56,6 +58,20 @@ export function buildFaqPageData(faqs: { question: string; answer: string }[]) {
       name: question,
       acceptedAnswer: { '@type': 'Answer', text: answer },
     })),
+  }
+}
+
+export function buildArticleData(post: BlogPostDt, path: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
+    ...(post.image ? { image: absoluteSiteUrl(post.image) } : {}),
+    ...(post.authorName
+      ? { author: { '@type': 'Person', name: post.authorName } }
+      : {}),
+    url: absoluteSiteUrl(path),
   }
 }
 

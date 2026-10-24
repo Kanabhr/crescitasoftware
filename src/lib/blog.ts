@@ -87,7 +87,7 @@ function extractYoutubeId(raw: string): string {
  * The access-control stub returns read: true for everyone, so this filter
  * is what keeps drafts and scheduled posts off the public site.
  */
-const publishedFilter = (): Where => ({
+export const publishedFilter = (): Where => ({
   and: [
     { _status: { equals: 'published' } } as Where,
     {
