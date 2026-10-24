@@ -215,7 +215,7 @@ export async function getBlogPosts(limit?: number): Promise<BlogItemDt[]> {
     ...(limit ? { limit } : { pagination: false }),
     depth: 1,
   })
-  if (docs.length === 0) {
+  if (docs.length === 0 && (await payload.count({ collection: 'posts' })).totalDocs === 0) {
     // Fallback: static data sorted newest-first by id (proxy for insertion order)
     const sorted = [...blogData].sort((a, b) => b.id - a.id)
     return limit ? sorted.slice(0, limit) : sorted
@@ -273,12 +273,13 @@ export async function getLatestPostId(): Promise<number | null> {
   const { docs } = await payload.find({
     collection: 'posts',
     where: publishedFilter(),
-    sort: '-id',
+    sort: '-publishedAt',
     limit: 1,
     depth: 0,
   })
   if (docs[0]) return (docs[0] as unknown as PostDoc).id
-  return blogData.length > 0 ? blogData[0].id : null
+  const { totalDocs } = await payload.count({ collection: 'posts' })
+  return totalDocs === 0 && blogData.length > 0 ? blogData[0].id : null
 }
 
 /** Latest n posts for the sidebar widget. */
@@ -287,12 +288,13 @@ export async function getLatestPosts(n: number = 3): Promise<BlogItemDt[]> {
   const { docs } = await payload.find({
     collection: 'posts',
     where: publishedFilter(),
-    sort: '-id',
+    sort: '-publishedAt',
     limit: n,
     depth: 1,
   })
   if (docs.length > 0) return docs.map(toBlogItem)
-  return blogData.slice(-n) // fallback
+  const { totalDocs } = await payload.count({ collection: 'posts' })
+  return totalDocs === 0 ? blogData.slice(-n) : []
 }
 
 /* ------------------------------------------------------------------ */

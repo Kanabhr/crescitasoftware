@@ -4,6 +4,8 @@ import PageBanner from "@/components/banner/PageBanner";
 import { getLatestPostId } from "@/lib/blog";
 import { Metadata } from "next";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
     title: "Blog Details - Creative Portfolio Agency Nextjs Template",
 };

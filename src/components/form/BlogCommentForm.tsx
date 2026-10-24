@@ -35,7 +35,7 @@ const BlogCommentForm = ({ postId }: BlogCommentFormProps) => {
             if (data.website) formData.append("website", data.website);
             formData.append("comment", data.comment);
 
-            const res = await fetch("/api/blog-comments", { method: "POST", body: formData });
+            const res = await fetch("/api/comment-submissions", { method: "POST", body: formData });
             const json = await res.json();
 
             if (json.ok) {

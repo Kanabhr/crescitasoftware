@@ -3,6 +3,8 @@ import BlogTopIntro from "@/components/blog/BlogTopIntro";
 import { getBlogPosts } from "@/lib/blog";
 import { Metadata } from "next";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
     title: "Blog - Creative Portfolio Agency Nextjs Template",
 };
