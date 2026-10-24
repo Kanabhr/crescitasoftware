@@ -1,4 +1,4 @@
-//define interface for PageParams props
+﻿//define interface for PageParams props
 export interface PageParamsProps {
     params: Promise<{ id: number }>;
 }
@@ -138,4 +138,24 @@ export interface BlogComment {
     date: string;
     content: string;
     replies?: BlogComment[];
+}
+//define interface for blog SEO DT
+export interface BlogSeoData {
+    metaTitle?: string;
+    metaDescription?: string;
+    shareImageUrl?: string;
+    canonicalUrl?: string;
+    noIndex?: boolean;
+}
+//define interface for blog post DT (extends BlogItemDt with detail-page fields)
+export interface BlogPostDt extends BlogItemDt {
+    slug?: string;
+    body?: unknown;
+    authorName?: string;
+    authorBio?: string;
+    authorPhoto?: string;
+    authorId?: number;
+    categoryNames?: string[];
+    publishedAt?: string;
+    seo?: BlogSeoData;
 }

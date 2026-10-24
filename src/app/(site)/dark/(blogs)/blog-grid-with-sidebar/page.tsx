@@ -1,5 +1,5 @@
-import BlogStandardTopIntro from "@/components/blog/subComponents/BlogStandardTopIntro";
 import BlogStandardGridArea from "@/components/blog/BlogStandardGridArea";
+import BlogStandardTopIntro from "@/components/blog/subComponents/BlogStandardTopIntro";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

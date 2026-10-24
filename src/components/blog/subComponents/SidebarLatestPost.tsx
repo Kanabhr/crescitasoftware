@@ -1,11 +1,11 @@
 import SmartLink from "@/components/common/SmartLink";
-import { blogData } from "@/data/blog-data";
+import { getLatestPosts } from "@/lib/blog";
 import Image from "next/image";
 import Link from "next/link";
 
-const SidebarLatestPost = () => {
+const SidebarLatestPost = async () => {
     // display sidebar blog items
-    const displayBlogData = blogData.slice(36, 39);
+    const displayBlogData = await getLatestPosts(3);
 
     return (
         <div className="rc-post-wrap">

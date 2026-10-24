@@ -1,5 +1,5 @@
-import BlogListSecondary from "@/components/blog/BlogListSecondary";
 import BlogBreadcrumb from "@/components/breadcrumb/BlogBreadcrumb";
+import BlogListSecondary from "@/components/blog/BlogListSecondary";
 import BlogListPrimary from "@/components/blog/BlogListPrimary";
 import PageBanner from "@/components/banner/PageBanner";
 import { Metadata } from "next";

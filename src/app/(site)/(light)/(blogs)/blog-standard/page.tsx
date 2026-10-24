@@ -10,7 +10,7 @@ const page = () => {
     return (
         <main>
             <BlogStandardTopIntro title="Core Insight" />
-            <BlogStandardArea/>
+            <BlogStandardArea />
         </main>
     );
 };

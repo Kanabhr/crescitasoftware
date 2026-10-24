@@ -1,11 +1,11 @@
 import BlogStandardPostItem from "./subComponents/BlogStandardPostItem";
 import BlogPagination from "./subComponents/BlogPagination";
-import { blogData } from "@/data/blog-data";
+import { getBlogPosts } from "@/lib/blog";
 import BlogSidebar from "./BlogSidebar";
 
-const BlogStandardArea = () => {
-    // display blog items
-    const displayBlogData = blogData.slice(39, 43);
+const BlogStandardArea = async () => {
+    // Newest 4 posts (matches the original 4-post standard layout)
+    const displayBlogData = await getBlogPosts(4);
 
     return (
         <div className="tp-blog-standard-area pb-160">

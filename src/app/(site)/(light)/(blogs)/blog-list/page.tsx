@@ -7,6 +7,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Blog List - Creative Portfolio Agency Nextjs Template",
 };
+
 const page = () => {
     return (
         <main>
