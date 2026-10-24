@@ -1,5 +1,6 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
+import { SUPPORTED_CURRENCIES } from '../lib/currency'
 
 const PRICING_PATHS = ['/pricing', '/service', '/dark/pricing', '/dark/service']
 
@@ -59,7 +60,7 @@ export const Plans: CollectionConfig = {
           type: 'select',
           required: true,
           defaultValue: 'USD',
-          options: ['USD', 'EUR', 'GBP', 'INR', 'AED', 'CAD', 'AUD', 'SGD'],
+          options: [...SUPPORTED_CURRENCIES],
         },
         {
           name: 'countries',

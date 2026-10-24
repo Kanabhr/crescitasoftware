@@ -113,6 +113,23 @@ export interface PricingPlanDT {
     buttonBorder: boolean;
     ctaLink?: string;
 };
+export interface PricingPriceRowDT {
+    currency: string;
+    countries?: string[] | null;
+    billingCycle: "monthly" | "yearly";
+    amount?: number | null;
+    label?: string | null;
+    periodLabel?: string | null;
+}
+export interface PricingPlanSourceDT {
+    name: string;
+    description: string;
+    popular?: boolean;
+    buttonBorder: boolean;
+    features: string[];
+    ctaLink?: string;
+    prices: PricingPriceRowDT[];
+}
 //define interface for checkout Billing Form DT
 export interface BillingFormDataDT {
     firstName: string;

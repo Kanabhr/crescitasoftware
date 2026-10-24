@@ -2,8 +2,8 @@ import ServicePricingClient from "./ServicePricingClient";
 import { getPricingPlans } from "@/lib/pricing";
 
 const ServicePricing = async () => {
-    const { monthly, yearly } = await getPricingPlans();
-    return <ServicePricingClient monthlyPlans={monthly} yearlyPlans={yearly} />;
+    const plans = await getPricingPlans();
+    return <ServicePricingClient plans={plans} />;
 };
 
 export default ServicePricing;

@@ -1,17 +1,20 @@
 "use client";
 
 import PricingSingleItem from "./subComponents/PricingSingleItem";
-import { PricingPlanDT } from "@/types/custom-dt";
+import CurrencySelector from "./CurrencySelector";
+import { useCurrency } from "./useCurrency";
+import type { PricingPlanSourceDT } from "@/types/custom-dt";
 import { useState } from "react";
 
 interface Props {
-    monthlyPlans: PricingPlanDT[];
-    yearlyPlans: PricingPlanDT[];
+    plans: PricingPlanSourceDT[];
 }
 
-const ServicePricingClient = ({ monthlyPlans, yearlyPlans }: Props) => {
+const ServicePricingClient = ({ plans }: Props) => {
     const [isMonthly, setIsMonthly] = useState(true);
     const togglePlan = () => setIsMonthly(!isMonthly);
+    const { currency, availableCurrencies, monthlyPlans, yearlyPlans, resolved, selectCurrency } =
+        useCurrency(plans);
 
     return (
         <div className="tp-pricing-ptb pt-155 pb-130">
@@ -44,12 +47,24 @@ const ServicePricingClient = ({ monthlyPlans, yearlyPlans }: Props) => {
                             <label className={isMonthly ? "tp-toggler-post" : "tp-toggler-post is-active"}>
                                 Yearly
                             </label>
+                            <CurrencySelector
+                                currency={currency}
+                                currencies={availableCurrencies}
+                                onChange={selectCurrency}
+                            />
                         </div>
                     </div>
                 </div>
 
                 {/* Pricing Tabs */}
-                <div className="row">
+                <noscript>
+                    <style>{".geo-pricing-results{visibility:visible!important}"}</style>
+                </noscript>
+                <div
+                    className="row geo-pricing-results"
+                    style={{ visibility: resolved ? "visible" : "hidden" }}
+                    aria-hidden={!resolved}
+                >
                     {isMonthly ? PricingSingleItem(monthlyPlans) : PricingSingleItem(yearlyPlans)}
                 </div>
             </div>

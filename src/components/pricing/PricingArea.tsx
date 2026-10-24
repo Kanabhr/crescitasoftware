@@ -2,8 +2,8 @@
 import { getPricingPlans } from "@/lib/pricing";
 
 const PricingArea = async () => {
-    const { monthly, yearly } = await getPricingPlans();
-    return <PricingAreaClient monthlyPlans={monthly} yearlyPlans={yearly} />;
+    const plans = await getPricingPlans();
+    return <PricingAreaClient plans={plans} />;
 };
 
 export default PricingArea;
