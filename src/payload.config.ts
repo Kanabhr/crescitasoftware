@@ -1,22 +1,24 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
-import sharp from 'sharp'
-import { FaqItems } from './collections/FaqItems'
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Plans } from './collections/Plans'
-import { Jobs } from './collections/Jobs'
-import { Applications } from './collections/Applications'
-import { Authors } from './collections/Authors'
-import { Categories } from './collections/Categories'
-import { Posts } from './collections/Posts'
-import { Comments } from './collections/Comments'
-import { PageSeo } from './collections/PageSeo'
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+import { postgresAdapter } from "@payloadcms/db-postgres";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import path from "path";
+import { buildConfig } from "payload";
+import { fileURLToPath } from "url";
+import sharp from "sharp";
+import { FaqItems } from "./collections/FaqItems";
+import { Users } from "./collections/Users";
+import { Media } from "./collections/Media";
+import { Plans } from "./collections/Plans";
+import { Jobs } from "./collections/Jobs";
+import { Applications } from "./collections/Applications";
+import { Authors } from "./collections/Authors";
+import { Categories } from "./collections/Categories";
+import { Posts } from "./collections/Posts";
+import { Comments } from "./collections/Comments";
+import { PageSeo } from "./collections/PageSeo";
+import { CareerPage } from "./globals/CareerPage";
+import { AboutPage } from "./globals/AboutPage";
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export default buildConfig({
   admin: {
@@ -26,16 +28,17 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, FaqItems, Plans, Jobs, Applications, Authors, Categories, Posts, Comments, PageSeo],
+  globals: [CareerPage, AboutPage],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: process.env.DATABASE_URI || "",
     },
   }),
   sharp,
   plugins: [],
-})
+});

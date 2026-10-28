@@ -1,4 +1,4 @@
-import BrandingStudioBrand from "@/components/brand/BrandingStudioBrand";
+import AboutUsBrands from "@/components/brand/AboutUsBrands";
 import AboutUsTeam from "@/components/team/AboutUsTeam";
 import AboutUsSlider from "@/components/about/AboutUsSlider";
 import AboutUsIntro from "@/components/about/AboutUsIntro";
@@ -20,7 +20,7 @@ const page = () => {
             <AboutUsArea />
             <AboutUsSlider />
             <AboutUsIntro />
-            <BrandingStudioBrand spacingClass="pb-160" />
+            <AboutUsBrands spacingClass="pb-160" />
             <AboutUsTeam />
             <AboutUsAward />
         </main>
