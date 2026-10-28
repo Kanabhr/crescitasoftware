@@ -1,5 +1,6 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { s3Storage } from "@payloadcms/storage-s3";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -19,7 +20,19 @@ import { CareerPage } from "./globals/CareerPage";
 import { AboutPage } from "./globals/AboutPage";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+// Cloud storage switches on only when every S3 variable exists, so other
+// worktrees and local setups keep using local folders.
+const s3Enabled = Boolean(process.env.S3_ENDPOINT && process.env.S3_REGION && process.env.S3_ACCESS_KEY_ID && process.env.S3_SECRET_ACCESS_KEY && process.env.S3_BUCKET_MEDIA && process.env.S3_BUCKET_RESUMES);
 
+const s3Config = {
+  endpoint: process.env.S3_ENDPOINT,
+  region: process.env.S3_REGION,
+  forcePathStyle: true, // Supabase's S3 endpoint requires path-style URLs
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
+  },
+};
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -40,5 +53,18 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    s3Storage({
+      enabled: s3Enabled,
+      collections: { media: true },
+      bucket: process.env.S3_BUCKET_MEDIA || "",
+      config: s3Config,
+    }),
+    s3Storage({
+      enabled: s3Enabled,
+      collections: { applications: true },
+      bucket: process.env.S3_BUCKET_RESUMES || "",
+      config: s3Config,
+    }),
+  ],
 });
