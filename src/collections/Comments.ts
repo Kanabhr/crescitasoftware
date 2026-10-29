@@ -1,6 +1,8 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
+import { hasResourcePermission } from '../access/collectionAccess'
 
 const revalidateBlogDetailsPages = () => {
   revalidatePath('/blog-details')
@@ -15,6 +17,7 @@ export const Comments: CollectionConfig = {
   admin: {
     useAsTitle: 'authorName',
     defaultColumns: ['authorName', 'post', 'status', 'createdAt'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'blog-comments'),
   },
   defaultSort: '-createdAt',
   access: collectionAccess('blog-comments'),
@@ -36,12 +39,12 @@ export const Comments: CollectionConfig = {
       ],
     },
     {
-  name: 'authorEmail',
-  type: 'text',
-  required: true,
-  admin: { readOnly: true },
-  access: { read: ({ req }) => Boolean(req.user) },
-},
+      name: 'authorEmail',
+      type: 'text',
+      required: true,
+      admin: { readOnly: true },
+      access: { read: ({ req }) => hasResourcePermission(req, 'blog-comments', 'read') },
+    },
     { name: 'post', type: 'relationship', relationTo: 'posts', admin: { readOnly: true } },
     { name: 'authorName', type: 'text', required: true, admin: { readOnly: true } },
     { name: 'body', type: 'textarea', required: true, admin: { readOnly: true } },

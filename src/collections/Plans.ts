@@ -1,5 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
+import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 import { SUPPORTED_CURRENCIES } from '../lib/currency'
 
 const PRICING_PATHS = ['/pricing', '/service', '/dark/pricing', '/dark/service']
@@ -14,7 +16,9 @@ export const Plans: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'order', 'popular'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'plans'),
   },
+  access: collectionAccess('plans'),
   defaultSort: 'order',
   hooks: {
     afterChange: [({ doc }) => { revalidatePricingPages(); return doc }],

@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 import { slugify } from '../lib/slugify'
 
 const BLOG_PATHS = [
@@ -23,6 +24,7 @@ export const Categories: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'categories'),
   },
   access: collectionAccess('categories'),
   hooks: {

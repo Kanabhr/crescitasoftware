@@ -122,6 +122,7 @@ export async function POST(request: Request) {
         status: 'new',
         answers,
       },
+      overrideAccess: true,
       ...(upload ? { file: upload } : {}),
     })
   } catch (err) {

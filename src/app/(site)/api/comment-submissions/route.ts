@@ -104,6 +104,7 @@ export async function POST(request: Request) {
         },
         limit: 1,
         depth: 0,
+        overrideAccess: true,
       })
       if (!parentDocs[0]) {
         return NextResponse.json(
@@ -132,6 +133,7 @@ export async function POST(request: Request) {
         status: 'pending',
         ...(parent ? { parent } : {}),
       },
+      overrideAccess: true,
     })
   } catch (err) {
     console.error('Comment save failed:', err instanceof Error ? err.message : 'unknown error')

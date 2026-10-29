@@ -1,5 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
+import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 import { DEFAULT_FORM_FIELDS } from '../lib/defaultFormFields'
 import { seoFields } from '../lib/seoFields'
 const revalidateCareerPages = () => {
@@ -26,7 +28,9 @@ export const Jobs: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'department', 'status', 'openRoles'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'jobs'),
   },
+  access: collectionAccess('jobs'),
   defaultSort: 'id',
   hooks: {
     afterChange: [({ doc }) => { revalidateCareerPages(); return doc }],

@@ -1,5 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
+import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 
 // Every route that renders FAQ content. Extra paths are harmless.
 const FAQ_PATHS = [
@@ -17,7 +19,9 @@ export const FaqItems: CollectionConfig = {
   admin: {
     useAsTitle: 'question',
     defaultColumns: ['question', 'placement', 'order', 'defaultOpen'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'faq-items'),
   },
+  access: collectionAccess('faq-items'),
   defaultSort: 'order',
   hooks: {
     afterChange: [({ doc }) => { revalidateFaqPages(); return doc }],

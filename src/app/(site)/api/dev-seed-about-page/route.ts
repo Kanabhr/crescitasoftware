@@ -2,6 +2,7 @@ import path from "node:path";
 import { NextResponse } from "next/server";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { isSuperAdminUser } from "@/access/routeAuth";
 
 const file = (rel: string) => path.join(process.cwd(), "public", rel);
 const num = (n: number) => (n === 1 ? "" : `-${n}`);
@@ -14,6 +15,9 @@ export async function GET(request: Request) {
   const { user } = await payload.auth({ headers: request.headers });
   if (!user) {
     return NextResponse.json({ error: "Log in at /admin first" }, { status: 401 });
+  }
+  if (!(await isSuperAdminUser(payload, user))) {
+    return NextResponse.json({ error: "Super admin access required" }, { status: 403 });
   }
 
   const existing = (await payload.findGlobal({ slug: "about-page", depth: 0 })) as unknown as {
