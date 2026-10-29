@@ -37,9 +37,7 @@ const s3Config = {
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
   },
 };
-const configuredCollections: CollectionConfig[] = [
-  Users, Roles, Media, FaqItems, Plans, Jobs, Applications, Authors, Categories, Posts, Comments, PageSeo,
-];
+const configuredCollections: CollectionConfig[] = [Users, Roles, Media, FaqItems, Plans, Jobs, Applications, Authors, Categories, Posts, Comments, PageSeo];
 const configuredGlobals: GlobalConfig[] = [CareerPage, AboutPage];
 const securedCollections = configuredCollections.map((collection) => {
   if (collection.slug === "users" || collection.slug === "roles") return collection;
@@ -87,15 +85,10 @@ export default buildConfig({
     }),
   ],
   onInit: async (payload) => {
-    const configuredResources = [
-      ...configuredCollections.map(({ slug }) => slug),
-      ...configuredGlobals.map(({ slug }) => slug),
-    ]
-    const unregisteredResources = configuredResources.filter(
-      (slug) => !Object.prototype.hasOwnProperty.call(resources, slug),
-    )
+    const configuredResources = [...configuredCollections.map(({ slug }) => slug), ...configuredGlobals.map(({ slug }) => slug)];
+    const unregisteredResources = configuredResources.filter((slug) => !Object.prototype.hasOwnProperty.call(resources, slug));
     if (process.env.NODE_ENV !== "production" && unregisteredResources.length > 0) {
-      payload.logger.error(`[RBAC] Resources missing from src/access/resources.ts: ${unregisteredResources.join(", ")}`)
+      payload.logger.error(`[RBAC] Resources missing from src/access/resources.ts: ${unregisteredResources.join(", ")}`);
     }
 
     const { docs: existingAdminRoles } = await payload.find({
@@ -104,8 +97,8 @@ export default buildConfig({
       limit: 1,
       depth: 0,
       overrideAccess: true,
-    })
-    let adminRole: { id: number | string; isSuperAdmin?: boolean }
+    });
+    let adminRole: { id: number | string; isSuperAdmin?: boolean };
     if (!existingAdminRoles[0]) {
       const createdAdminRole = await payload.create({
         collection: "roles",
@@ -117,39 +110,46 @@ export default buildConfig({
           permissions: [],
         },
         overrideAccess: true,
-      })
-      adminRole = { id: createdAdminRole.id, isSuperAdmin: true }
+      });
+      adminRole = { id: createdAdminRole.id, isSuperAdmin: true };
     } else if (!(existingAdminRoles[0] as { isSuperAdmin?: boolean }).isSuperAdmin) {
-      const existingAdminRole = existingAdminRoles[0] as { id: number | string }
+      const existingAdminRole = existingAdminRoles[0] as { id: number | string };
       const updatedAdminRole = await payload.update({
         collection: "roles",
         id: existingAdminRole.id,
         data: { isSuperAdmin: true },
         overrideAccess: true,
-      })
-      adminRole = { id: updatedAdminRole.id, isSuperAdmin: true }
+      });
+      adminRole = { id: updatedAdminRole.id, isSuperAdmin: true };
     } else {
-      const existingAdminRole = existingAdminRoles[0] as { id: number | string; isSuperAdmin: boolean }
-      adminRole = { id: existingAdminRole.id, isSuperAdmin: existingAdminRole.isSuperAdmin }
+      const existingAdminRole = existingAdminRoles[0] as { id: number | string; isSuperAdmin: boolean };
+      adminRole = { id: existingAdminRole.id, isSuperAdmin: existingAdminRole.isSuperAdmin };
     }
 
-    const { docs: unassignedUsers } = await payload.find({
+    const { totalDocs: adminHolders } = await payload.count({
       collection: "users",
-      where: { role: { exists: false } },
-      pagination: false,
-      depth: 0,
+      where: { role: { equals: adminRole.id } },
       overrideAccess: true,
-    })
-    for (const user of unassignedUsers) {
-      await payload.update({
+    });
+    if (adminHolders === 0) {
+      const { docs: unassignedUsers } = await payload.find({
         collection: "users",
-        id: user.id,
-        data: { role: adminRole.id },
+        where: { role: { exists: false } },
+        pagination: false,
+        depth: 0,
         overrideAccess: true,
-      })
+      });
+      for (const user of unassignedUsers) {
+        await payload.update({
+          collection: "users",
+          id: user.id,
+          data: { role: adminRole.id },
+          overrideAccess: true,
+        });
+      }
     }
 
-    const resetAdminEmail = process.env.PAYLOAD_RESET_ADMIN?.trim()
+    const resetAdminEmail = process.env.PAYLOAD_RESET_ADMIN?.trim();
     if (resetAdminEmail) {
       const { docs: resetUsers } = await payload.find({
         collection: "users",
@@ -157,16 +157,16 @@ export default buildConfig({
         limit: 1,
         depth: 0,
         overrideAccess: true,
-      })
+      });
       if (resetUsers[0]) {
         await payload.update({
           collection: "users",
           id: resetUsers[0].id,
           data: { role: adminRole.id },
           overrideAccess: true,
-        })
+        });
       } else {
-        payload.logger.error("[RBAC] PAYLOAD_RESET_ADMIN did not match an existing user.")
+        payload.logger.error("[RBAC] PAYLOAD_RESET_ADMIN did not match an existing user.");
       }
     }
   },
