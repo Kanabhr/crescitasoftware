@@ -1,10 +1,14 @@
 import { revalidatePath } from "next/cache";
 import type { GlobalConfig } from "payload";
+import { globalAccess } from "../access/collectionAccess";
+import { clientUserCanRead } from "../access/resources";
 import { BENEFIT_ICON_OPTIONS } from "../lib/benefitIconKeys";
 
 export const CareerPage: GlobalConfig = {
   slug: "career-page",
   label: "Career page",
+  admin: { hidden: ({ user }) => !clientUserCanRead(user, "career-page") },
+  access: globalAccess("career-page"),
   hooks: {
     afterChange: [
       ({ doc }) => {

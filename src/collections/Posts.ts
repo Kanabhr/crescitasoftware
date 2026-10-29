@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 import { seoFields } from '../lib/seoFields'
 import { slugify } from '../lib/slugify'
 
@@ -25,6 +26,7 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'publishedAt', '_status'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'posts'),
   },
   defaultSort: '-publishedAt',
   access: collectionAccess('posts'),

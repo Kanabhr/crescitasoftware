@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { collectionAccess } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 import { seoFields } from '../lib/seoFields'
 
 function revalidateSeoPath(path: string) {
@@ -18,6 +19,7 @@ export const PageSeo: CollectionConfig = {
   admin: {
     useAsTitle: 'path',
     defaultColumns: ['path', 'seo.metaTitle', 'seo.noIndex'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'page-seo'),
   },
   access: collectionAccess('page-seo'),
   hooks: {

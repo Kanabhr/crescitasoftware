@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { isSuperAdminUser } from '@/access/routeAuth'
 import { careerData } from '@/data/career-data'
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -22,6 +23,9 @@ export async function GET(request: Request) {
   const { user } = await payload.auth({ headers: request.headers })
   if (!user) {
     return NextResponse.json({ error: 'Log in at /admin first' }, { status: 401 })
+  }
+  if (!(await isSuperAdminUser(payload, user))) {
+    return NextResponse.json({ error: 'Super admin access required' }, { status: 403 })
   }
 
   const existing = await payload.count({ collection: 'jobs' })

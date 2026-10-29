@@ -1,9 +1,13 @@
 import { revalidatePath } from "next/cache";
 import type { GlobalConfig } from "payload";
+import { globalAccess } from "../access/collectionAccess";
+import { clientUserCanRead } from "../access/resources";
 
 export const AboutPage: GlobalConfig = {
   slug: "about-page",
   label: "About Us page",
+  admin: { hidden: ({ user }) => !clientUserCanRead(user, "about-page") },
+  access: globalAccess("about-page"),
   hooks: {
     afterChange: [
       ({ doc }) => {

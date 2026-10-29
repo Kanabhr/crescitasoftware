@@ -1,8 +1,8 @@
 import path from 'node:path'
-import type { Access, CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
+import { collectionAccess, hasResourcePermission } from '../access/collectionAccess'
+import { clientUserCanRead } from '../access/resources'
 import { ALLOWED_FILE_TYPES } from '../lib/applicationRules'
-
-const staffOnly: Access = ({ req }) => Boolean(req.user)
 
 export const Applications: CollectionConfig = {
   slug: 'applications',
@@ -10,12 +10,11 @@ export const Applications: CollectionConfig = {
   admin: {
     useAsTitle: 'applicantName',
     defaultColumns: ['applicantName', 'applicantEmail', 'jobTitle', 'status', 'createdAt'],
+    hidden: ({ user }) => !clientUserCanRead(user, 'applications'),
   },
   defaultSort: '-createdAt',
   access: {
-    read: staffOnly,
-    update: staffOnly,
-    delete: staffOnly,
+    ...collectionAccess('applications'),
     create: () => false, // only the site's endpoint creates applications
   },
   upload: {
@@ -41,11 +40,17 @@ export const Applications: CollectionConfig = {
     { name: 'job', type: 'relationship', relationTo: 'jobs', admin: { readOnly: true } },
     { name: 'jobTitle', type: 'text', admin: { readOnly: true } },
     { name: 'applicantName', type: 'text', admin: { readOnly: true } },
-    { name: 'applicantEmail', type: 'text', admin: { readOnly: true } },
+    {
+      name: 'applicantEmail',
+      type: 'text',
+      admin: { readOnly: true },
+      access: { read: ({ req }) => hasResourcePermission(req, 'applications', 'read') },
+    },
     {
       name: 'answers',
       type: 'array',
       admin: { readOnly: true },
+      access: { read: ({ req }) => hasResourcePermission(req, 'applications', 'read') },
       fields: [
         { name: 'label', type: 'text', admin: { readOnly: true } },
         { name: 'key', type: 'text', admin: { readOnly: true } },
