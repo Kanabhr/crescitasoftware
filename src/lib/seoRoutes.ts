@@ -1,10 +1,15 @@
-export type StaticSeoRoute = { path: string; title: string }
+export type StaticSeoRoute = { path: string; title: string };
 
 export const STATIC_SEO_ROUTES: StaticSeoRoute[] = [
   { path: "/404", title: "404 Page - Digital Agency & Creative Portfolio" },
   { path: "/about-me", title: "About Me - Creative Portfolio Agency Nextjs Template" },
   { path: "/about-us", title: "About US - Creative Portfolio Agency Nextjs Template" },
   { path: "/agency-shop", title: "Shop - Creative Portfolio Agency Nextjs Template" },
+  { path: "/shop", title: "Shop - Creative Portfolio Agency Nextjs Template" },
+  { path: "/shop-details", title: "Shop Details - Creative Portfolio Agency Nextjs Template" },
+  { path: "/team", title: "Team - Creative Portfolio Agency Nextjs Template" },
+  { path: "/team-details", title: "Team Details - Creative Portfolio Agency Nextjs Template" },
+  { path: "/wishlist", title: "Wishlist - Creative Portfolio Agency Nextjs Template" },
   { path: "/blog", title: "Blog - Crescita" },
   { path: "/blog-details", title: "Blog Details - Crescita" },
   { path: "/blog-grid-with-sidebar", title: "Blog Grid With Sidebar - Crescita" },
@@ -47,4 +52,4 @@ export const STATIC_SEO_ROUTES: StaticSeoRoute[] = [
   { path: "/team", title: "Team - Creative Portfolio Agency Nextjs Template" },
   { path: "/team-details", title: "Team Details - Creative Portfolio Agency Nextjs Template" },
   { path: "/wishlist", title: "Wishlist - Creative Portfolio Agency Nextjs Template" },
-]
+];
