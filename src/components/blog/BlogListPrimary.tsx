@@ -1,5 +1,5 @@
 import BlogListPrimaryCard from "./subComponents/BlogListPrimaryCard";
-import { blogData } from "@/data/blog-data";
+import { getBlogPosts } from "@/lib/blog";
 import Link from "next/link";
 
 const blogTags = [
@@ -14,9 +14,9 @@ const blogTags = [
     "3d modeling",
 ];
 
-const BlogListPrimary = () => {
-    // display blog items
-    const displayBlogData = blogData.slice(22, 24);
+const BlogListPrimary = async () => {
+    // Newest 2 posts (matches the original 2-card primary layout)
+    const displayBlogData = await getBlogPosts(2);
 
     return (
         <div className="tp-blog-area pt-100">

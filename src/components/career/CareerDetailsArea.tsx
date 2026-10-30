@@ -1,10 +1,12 @@
-import { careerData } from "@/data/career-data";
+import { getJobById } from "@/lib/careers";
 import { IdProps } from "@/types/custom-dt";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-const CareerDetailsArea = ({ id }: IdProps) => {
+const CareerDetailsArea =  async({ id }: IdProps) => {
     // Find the career that matches the given ID
-    const careerItem = careerData.find((item) => item.id == id);
+const careerItem = await getJobById(id);
+    if (!careerItem) notFound();
 
     return (
         <section className="tp-career-details-ptb pt-120 pb-100">

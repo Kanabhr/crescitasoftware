@@ -1,4 +1,4 @@
-//define interface for PageParams props
+﻿//define interface for PageParams props
 export interface PageParamsProps {
     params: Promise<{ id: number }>;
 }
@@ -111,7 +111,25 @@ export interface PricingPlanDT {
     popular?: boolean;
     features: string[];
     buttonBorder: boolean;
+    ctaLink?: string;
 };
+export interface PricingPriceRowDT {
+    currency: string;
+    countries?: string[] | null;
+    billingCycle: "monthly" | "yearly";
+    amount?: number | null;
+    label?: string | null;
+    periodLabel?: string | null;
+}
+export interface PricingPlanSourceDT {
+    name: string;
+    description: string;
+    popular?: boolean;
+    buttonBorder: boolean;
+    features: string[];
+    ctaLink?: string;
+    prices: PricingPriceRowDT[];
+}
 //define interface for checkout Billing Form DT
 export interface BillingFormDataDT {
     firstName: string;
@@ -137,4 +155,24 @@ export interface BlogComment {
     date: string;
     content: string;
     replies?: BlogComment[];
+}
+//define interface for blog SEO DT
+export interface BlogSeoData {
+    metaTitle?: string;
+    metaDescription?: string;
+    shareImageUrl?: string;
+    canonicalUrl?: string;
+    noIndex?: boolean;
+}
+//define interface for blog post DT (extends BlogItemDt with detail-page fields)
+export interface BlogPostDt extends BlogItemDt {
+    slug?: string;
+    body?: unknown;
+    authorName?: string;
+    authorBio?: string;
+    authorPhoto?: string;
+    authorId?: number;
+    categoryNames?: string[];
+    publishedAt?: string;
+    seo?: BlogSeoData;
 }

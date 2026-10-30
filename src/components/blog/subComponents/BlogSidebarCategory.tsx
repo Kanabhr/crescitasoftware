@@ -1,13 +1,9 @@
 import Link from "next/link";
+import { getBlogCategories } from "@/lib/blog";
 
-const categories = [
-    { id: 1, name: "Articles", count: 8 },
-    { id: 2, name: "Business", count: 4 },
-    { id: 3, name: "Family & Divorce", count: 12 },
-    { id: 4, name: "Web Design", count: 16 },
-];
+const BlogSidebarCategory = async () => {
+    const categories = await getBlogCategories();
 
-const BlogSidebarCategory = () => {
     return (
         <div className="sidebar-widget-category">
             <ul>

@@ -30,3 +30,11 @@ export interface CareerDT {
     roles: string;
     
 }
+export interface ApplicationFieldDT {
+    key: string;
+    label: string;
+    type: "text" | "email" | "textarea" | "select" | "file";
+    required: boolean;
+    width: "half" | "full";
+    options: string[];
+}

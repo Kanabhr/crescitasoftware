@@ -34,7 +34,7 @@ const PricingSingleItem = (plans: PricingPlanDT[]) =>
                 <div className="ds-price-item-btn">
                     <SmartLink
                         className={`tp-btn tp-btn-xxl w-100 justify-content-center ${plan.buttonBorder ? "" : "tp-btn-border"}`}
-                        href="/contact-us"
+                        href={plan.ctaLink ?? "/contact-us"}
                     >
                         <span>
                             <span className="text-1">Choose your plan</span>

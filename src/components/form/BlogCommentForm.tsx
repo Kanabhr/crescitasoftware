@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 type FormValues = {
     name: string;
@@ -10,18 +11,55 @@ type FormValues = {
     comment: string;
 };
 
-const BlogCommentForm = () => {
+interface BlogCommentFormProps {
+    postId?: number;
+}
+
+const BlogCommentForm = ({ postId }: BlogCommentFormProps) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset,
+        setError,
     } = useForm<FormValues>();
+    const [submitting, setSubmitting] = useState(false);
 
-    const onSubmit = () => {
-        toast.success("Comment submitted successfully!");
-        reset();
+    const onSubmit = async (data: FormValues) => {
+        setSubmitting(true);
+        try {
+            const formData = new FormData();
+            formData.append("postId", String(postId ?? ""));
+            formData.append("name", data.name);
+            formData.append("email", data.email);
+            if (data.website) formData.append("website", data.website);
+            formData.append("comment", data.comment);
+
+            const res = await fetch("/api/comment-submissions", { method: "POST", body: formData });
+            const json = await res.json();
+
+            if (json.ok) {
+                toast.success("Comment submitted! It will appear after moderation.");
+                reset();
+            } else if (json.fieldErrors) {
+                (Object.entries(json.fieldErrors) as [string, string][]).forEach(
+                    ([field, msg]) => {
+                        if (field === "name" || field === "email" || field === "comment") {
+                            setError(field as keyof FormValues, { message: msg });
+                        }
+                    },
+                );
+                toast.error(json.error || "Please check the highlighted fields.");
+            } else {
+                toast.error(json.error || "Something went wrong.");
+            }
+        } catch {
+            toast.error("Network error. Please try again.");
+        } finally {
+            setSubmitting(false);
+        }
     };
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="postbox-details-form-wrapper">
@@ -71,19 +109,6 @@ const BlogCommentForm = () => {
                             </div>
                         </div>
 
-                        {/* Website */}
-                        <div className="col-xl-12">
-                            <div className="postbox-details-input-box">
-                                <div className="postbox-details-input mb-25">
-                                    <label>Website</label>
-                                    <input
-                                        type="text"
-                                        {...register("website")}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
                         {/* Comment */}
                         <div className="col-xl-12">
                             <div className="postbox-details-input-box">
@@ -101,7 +126,9 @@ const BlogCommentForm = () => {
                                             })}
                                         />
                                         {errors.comment && (
-                                            <span className="form-error">{errors.comment.message}</span>
+                                            <span className="form-error">
+                                                {errors.comment.message}
+                                            </span>
                                         )}
                                     </div>
                                 </div>
@@ -112,11 +139,18 @@ const BlogCommentForm = () => {
                 <div className="postbox-details-suggetions mb-20">
                     <div className="postbox-details-remeber">
                         <input id="remeber" type="checkbox" />
-                        <label htmlFor="remeber">Save my name, email, and website in this browser for the next time I comment.</label>
+                        <label htmlFor="remeber">
+                            Save my name, email, and website in this browser for the next time I
+                            comment.
+                        </label>
                     </div>
                 </div>
                 <div className="postbox-details-input-box">
-                    <button type="submit" className="tp-btn d-inline-flex align-items-center">
+                    <button
+                        type="submit"
+                        className="tp-btn d-inline-flex align-items-center"
+                        disabled={submitting}
+                    >
                         <span>
                             <span className="text-1">Post Comment</span>
                             <span className="text-2">Post Comment</span>
@@ -124,6 +158,18 @@ const BlogCommentForm = () => {
                     </button>
                 </div>
             </div>
+            {/* Honeypot: real visitors never see this. Bots fill it and are silently ignored. */}
+            <span
+                aria-hidden="true"
+                style={{ display: "none" }}
+            >
+                <input
+                    type="text"
+                    {...register("website")}
+                    tabIndex={-1}
+                    autoComplete="off"
+                />
+            </span>
         </form>
     );
 };

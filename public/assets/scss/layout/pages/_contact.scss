@@ -452,3 +452,9 @@
         }
     }
 }
+.tp-contact-mail {
+    display: inline-block;
+    white-space: nowrap;                    /* never break the address */
+    font-size: clamp(18px, 1.9vw, 34px);    /* scales with the screen */
+    line-height: 1.2;
+}

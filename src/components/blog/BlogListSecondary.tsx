@@ -1,10 +1,10 @@
 import BlogListSecondaryCard from "./subComponents/BlogListSecondaryCard";
 import BlogPagination from "./subComponents/BlogPagination";
-import { blogData } from "@/data/blog-data";
+import { getBlogPosts } from "@/lib/blog";
 
-const BlogListSecondary = () => {
-    // display blog items
-    const displayBlogData = blogData.slice(24, 28);
+const BlogListSecondary = async () => {
+    // Newest 4 posts (matches the original 4-card secondary layout)
+    const displayBlogData = await getBlogPosts(4);
 
     return (
         <div className="tp-list-area pb-160">

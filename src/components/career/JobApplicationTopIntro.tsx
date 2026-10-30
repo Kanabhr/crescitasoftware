@@ -1,6 +1,11 @@
 import Image from "next/image";
 
-const JobApplicationTopIntro = () => {
+interface Props {
+    subtitle: string;
+    title: string;
+}
+
+const JobApplicationTopIntro = ({ subtitle, title }: Props) => {
     return (
         <div className="ar-hero-area about-us-spacing p-relative z-index-1 pb-80">
             <div className="tp-breadcrumb-bg">
@@ -11,8 +16,8 @@ const JobApplicationTopIntro = () => {
                     <div className="row justify-content-center">
                         <div className="col-lg-10">
                             <div className="ar-hero-title-box tp_fade_anim" data-delay=".3">
-                                <span className="tp-application-subtitle mb-25">Full time</span>
-                                <h3 className="tp-career-title pb-30">UI/UX Designer</h3>
+                                <span className="tp-application-subtitle mb-25">{subtitle}</span>
+                                <h3 className="tp-career-title pb-30">{title}</h3>
                             </div>
                         </div>
                     </div>

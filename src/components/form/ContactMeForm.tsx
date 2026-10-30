@@ -130,7 +130,7 @@ const ContactMeForm = () => {
             {/* Budget */}
             <div className="mb-50">
                 <div className="tp-contact-me-category tp-contact-me-budget">
-                    {["<2k", "2-5k", "5-10k", "10-15k", "15-20k"].map((item) => (
+                    {["<15000", "₹ 15000-35000", "₹ 35000-55000", "₹ 55000-100000", "₹ 100000-500000"].map((item) => (
                         <label key={item}>
                             <input
                                 type="radio"
@@ -182,7 +182,7 @@ const ContactMeForm = () => {
             >
                 <span>
                     <span className="text-1">Submit Message</span>
-                    <span className="text-2">Submit Message</span>
+                    {/* <span className="text-2">Submit Message</span> */}
                 </span>
                 <i>
                     <ButtonArrowIcon />

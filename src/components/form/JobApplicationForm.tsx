@@ -1,31 +1,89 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, type FieldValues, type RegisterOptions } from "react-hook-form";
 import { ButtonArrowIcon } from "@/svg";
 import { toast } from "react-toastify";
+import type { ApplicationFieldDT } from "@/types/career-dt";
+import { ALLOWED_EXTENSIONS, MAX_FILE_BYTES } from "@/lib/applicationRules";
 
-type JobFormValues = {
-    name: string;
-    email: string;
-    motivation: string;
-    project: string;
-    portfolio: string;
-    salary: string;
-    cv: FileList;
+interface Props {
+    jobId: number;
+    fields: ApplicationFieldDT[];
+}
+
+const ACCEPT = ALLOWED_EXTENSIONS.map((e) => `.${e}`).join(",");
+
+const rulesFor = (f: ApplicationFieldDT): RegisterOptions<FieldValues, string> => {
+    if (f.type === "file") {
+        return {
+            required: f.required ? `${f.label} is required` : false,
+            validate: (files: FileList | undefined) => {
+                const file = files?.[0];
+                if (!file) return true;
+                const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+                if (!ALLOWED_EXTENSIONS.includes(ext)) return "Upload a PDF or DOCX file.";
+                if (file.size > MAX_FILE_BYTES) return "File must be 5 MB or smaller.";
+                return true;
+            },
+        };
+    }
+    return {
+        required: f.required ? `${f.label} is required` : false,
+        ...(f.type === "email"
+            ? { pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" } }
+            : {}),
+    };
 };
 
-const JobApplicationForm = () => {
+const JobApplicationForm = ({ jobId, fields }: Props) => {
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
-    } = useForm<JobFormValues>();
+        setError,
+        formState: { errors, isSubmitting },
+    } = useForm<FieldValues>();
 
-    const onSubmit = () => {
-        toast.success("Application submitted successfully!");
-        reset(); // form clear
+    const onSubmit = async (values: FieldValues) => {
+        const body = new FormData();
+        body.append("jobId", String(jobId));
+        body.append("website", String(values.website ?? "")); // honeypot
+        for (const f of fields) {
+            if (f.type === "file") {
+                const file = (values[f.key] as FileList | undefined)?.[0];
+                if (file) body.append(f.key, file);
+            } else {
+                body.append(f.key, String(values[f.key] ?? ""));
+            }
+        }
+
+        try {
+            const res = await fetch("/api/job-applications", { method: "POST", body });
+            const data: { error?: string; fieldErrors?: Record<string, string> } = await res
+                .json()
+                .catch(() => ({}));
+
+            if (res.ok) {
+                toast.success("Application submitted successfully!");
+                reset();
+                return;
+            }
+            if (data.fieldErrors) {
+                for (const [key, message] of Object.entries(data.fieldErrors)) {
+                    setError(key, { type: "server", message });
+                }
+            }
+            toast.error(data.error ?? "Something went wrong. Please try again.");
+        } catch {
+            toast.error("Network error. Please check your connection and try again.");
+        }
     };
+
+    const labelOf = (f: ApplicationFieldDT) => `${f.label}${f.required ? "*" : ""}`;
+    const errorOf = (key: string) => errors[key]?.message as string | undefined;
+
+    const regularFields = fields.filter((f) => f.type !== "file");
+    const fileFields = fields.filter((f) => f.type === "file");
 
     return (
         <div className="tp-application-aera pb-140">
@@ -34,93 +92,67 @@ const JobApplicationForm = () => {
                     <div className="col-lg-10">
                         <div className="tp-contact-form-wrap tp-application-form-wrap">
                             <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+                                {/* Honeypot: hidden from people, bots fill it */}
+                                <div
+                                    aria-hidden="true"
+                                    style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
+                                >
+                                    <label>Website</label>
+                                    <input type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+                                </div>
+
                                 <div className="row">
-
-                                    {/* Name */}
-                                    <div className="col-lg-6">
-                                        <div className="tp-contact-form-input mb-20">
-                                            <label>Your Name*</label>
-                                            <input
-                                                type="text"
-                                                {...register("name", { required: "Name is required" })}
-                                            />
-                                            {errors.name && <p className="form-error">{errors.name.message}</p>}
+                                    {regularFields.map((f) => (
+                                        <div
+                                            key={f.key}
+                                            className={f.width === "half" ? "col-lg-6" : "col-lg-12"}
+                                        >
+                                            <div className="tp-contact-form-input mb-20">
+                                                <label>{labelOf(f)}</label>
+                                                {f.type === "textarea" ? (
+                                                    <textarea {...register(f.key, rulesFor(f))} />
+                                                ) : f.type === "select" ? (
+                                                    <select defaultValue="" {...register(f.key, rulesFor(f))}>
+                                                        <option value="" disabled>
+                                                            Select an option
+                                                        </option>
+                                                        {f.options.map((o) => (
+                                                            <option key={o} value={o}>
+                                                                {o}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    <input type={f.type} {...register(f.key, rulesFor(f))} />
+                                                )}
+                                                {errorOf(f.key) && (
+                                                    <p className="form-error">{errorOf(f.key)}</p>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    {/* Email */}
-                                    <div className="col-lg-6">
-                                        <div className="tp-contact-form-input mb-20">
-                                            <label>Your Email address*</label>
-                                            <input
-                                                type="email"
-                                                {...register("email", {
-                                                    required: "Email is required",
-                                                    pattern: {
-                                                        value: /^\S+@\S+$/i,
-                                                        message: "Invalid email address",
-                                                    },
-                                                })}
-                                            />
-                                            {errors.email && <p className="form-error">{errors.email.message}</p>}
-                                        </div>
-                                    </div>
-
-                                    {/* Motivation */}
-                                    <div className="col-lg-12">
-                                        <div className="tp-contact-form-input mb-20">
-                                            <label>Why you decided to apply here and why should we select you?*</label>
-                                            <textarea
-                                                {...register("motivation", { required: "This field is required" })}
-                                            />
-                                            {errors.motivation && <p className="form-error">{errors.motivation.message}</p>}
-                                        </div>
-                                    </div>
-
-                                    {/* Project */}
-                                    <div className="col-lg-12">
-                                        <div className="tp-contact-form-input mb-20">
-                                            <label>Tell us about a project you felt proud of</label>
-                                            <textarea {...register("project")} />
-                                        </div>
-                                    </div>
-
-                                    {/* Portfolio */}
-                                    <div className="col-lg-12">
-                                        <div className="tp-contact-form-input mb-20">
-                                            <label>Share your portfolio (Behance, Dribbble, etc.)*</label>
-                                            <textarea
-                                                {...register("portfolio", { required: "Portfolio link is required" })}
-                                            />
-                                            {errors.portfolio && <p className="form-error">{errors.portfolio.message}</p>}
-                                        </div>
-                                    </div>
-
-                                    {/* Salary */}
-                                    <div className="col-lg-12">
-                                        <div className="tp-contact-form-input mb-20">
-                                            <label>Your current salary & expected salary*</label>
-                                            <textarea
-                                                {...register("salary", { required: "Salary information is required" })}
-                                            />
-                                            {errors.salary && <p className="form-error">{errors.salary.message}</p>}
-                                        </div>
-                                    </div>
+                                    ))}
 
                                     {/* Upload + Submit */}
                                     <div className="col-lg-12">
                                         <div className="tp-application-form-btn d-flex justify-content-between">
-                                            <div className="tp-application-upload mb-15">
-                                                <span>Upload your CV *</span>
-                                                <input
-                                                    type="file"
-                                                    {...register("cv", { required: "CV is required" })}
-                                                />
-                                                {errors.cv && <p className="form-error">{errors.cv.message}</p>}
+                                            <div>
+                                                {fileFields.map((f) => (
+                                                    <div key={f.key} className="tp-application-upload mb-15">
+                                                        <span>{labelOf(f)}</span>
+                                                        <input
+                                                            type="file"
+                                                            accept={ACCEPT}
+                                                            {...register(f.key, rulesFor(f))}
+                                                        />
+                                                        {errorOf(f.key) && (
+                                                            <p className="form-error">{errorOf(f.key)}</p>
+                                                        )}
+                                                    </div>
+                                                ))}
                                             </div>
 
                                             <div className="tp-application-btn mb-15 mt-10">
-                                                <button className="tp-btn" type="submit">
+                                                <button className="tp-btn" type="submit" disabled={isSubmitting}>
                                                     <span>
                                                         <span className="text-1">Submit Now</span>
                                                         <span className="text-2">Submit Now</span>

@@ -23,15 +23,19 @@
             font-size: 45px;
         }
         &:hover{
+             color: #0058CC;  
             @include bgborder(currentColor, 0,100%);
             @include tp-transition(all .4s ease);
             background-size: 0 6px, 100% 6px;
             & a{
                 opacity: 1;
+                color: #0058CC; 
             }
             & .tp-service-icon{
                 opacity: 1;
                 visibility: visible;
+                 color: #0058CC;                  // arrow, if it is an icon font or currentColor SVG
+        & svg path{ fill: #0058CC; }     // arrow, if the SVG has hardcoded fills
             }
         }
         & a{
@@ -459,5 +463,19 @@
         &-border{
             transform: translateY(0)!important;
         }
+    }
+}
+@media (hover: hover) {
+    html:not(.cunnet-dark) .PARENT-CLASS:hover {
+        color: #0058CC;
+    }
+    html:not(.cunnet-dark) .PARENT-CLASS:hover a {
+        color: #0058CC;
+    }
+    html:not(.cunnet-dark) .PARENT-CLASS:hover .tp-service-icon {
+        color: #0058CC;
+    }
+    html:not(.cunnet-dark) .PARENT-CLASS:hover .tp-service-icon svg path {
+        fill: #0058CC;
     }
 }

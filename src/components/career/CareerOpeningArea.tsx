@@ -1,8 +1,8 @@
 import { ArrowIconEleven, ButtonArrowIcon } from "@/svg/ArrowIcons";
-import { careerData } from "@/data/career-data";
 import SmartLink from "../common/SmartLink";
-
-const CareerOpeningArea = () => {
+import { getJobs } from "@/lib/careers";
+const CareerOpeningArea = async () => {
+    const careerData = await getJobs();
     return (
         <section className="tp-career-opening-ptb pb-160">
             <div className="container container-1230">

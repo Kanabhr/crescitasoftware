@@ -1,7 +1,8 @@
 import FaqSingleItem from "./subComponents/FaqSingleItem";
-import { faqItems } from "@/data/faq-data";
+import { getGeneralFaq } from "@/lib/faq";
 
-const FaqArea = () => {
+const FaqArea = async () => {
+    const faqItems = await getGeneralFaq();
     return (
         <div id="faq" className="tp-faq-area pb-130">
             <div className="container">
@@ -27,5 +28,4 @@ const FaqArea = () => {
         </div>
     );
 };
-
 export default FaqArea;

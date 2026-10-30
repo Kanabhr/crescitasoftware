@@ -1,4 +1,4 @@
-import { QUICK_LINKS, SOCIAL_LINKS } from "@/data/footer-data";
+﻿import { QUICK_LINKS, SOCIAL_LINKS } from "@/data/footer-data";
 import BrandLogo from "../../components/common/BrandLogo";
 import { getCurrentYear } from "@/utils/getCurrentYear";
 import SmartLink from "@/components/common/SmartLink";
@@ -49,14 +49,14 @@ const CreativeAgencyFooter = () => {
                             <div className="col-xxl-4 col-xl-5 offset-xxl-5 offset-xl-3 col-lg-6">
                                 <div className="tp-footer-widget ml-40 mb-30 tp_fade_anim" data-delay=".5">
                                     <span className="tp-footer-dec">Searching for exceptional talents?</span>
-                                    <h4 className="tp-footer-email tp-ff-sequel-roman"><Link href="mailto:cunnet@gmail.com">cunnet@gmail.com</Link></h4>
+                                    <h4 className="tp-footer-email tp-ff-sequel-roman"><Link href="mailto:hello@crescitasoftware.com">hello@crescitasoftware.com</Link></h4>
                                 </div>
                             </div>
                         </div>
                         <div className="row align-items-end mt-35">
                             <div className="col-lg-4">
                                 <div className="tp-header-logo tp-footer-logo mb-30 tp_fade_anim" data-delay=".6">
-                                    <BrandLogo logo1Width={229} logo1Height={48} logo2Width={229} logo2Height={56} />
+                                  <BrandLogo logo1Width={200} logo1Height={60} logo2Width={200} logo2Height={60} />
                                 </div>
                             </div>
                             <div className="col-lg-8">
